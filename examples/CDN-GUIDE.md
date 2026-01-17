@@ -29,12 +29,16 @@ jsDelivr is a fast, reliable CDN with automatic minification and compression.
 </html>
 ```
 
-### Option 2: unpkg
+### Option 2: unpkg (Requires npm publishing)
+
+⚠️ Note: unpkg URLs only work after the package is published to npm with `dist/` files included.
 
 ```html
 <script src="https://unpkg.com/versus@latest/dist/cdn/versus.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/versus@latest/dist/cdn/versus.min.css">
 ```
+
+If the package is not yet published to npm, use jsDelivr with GitHub (Option 1) instead.
 
 ### Option 3: GitHub Raw (Development Only)
 
