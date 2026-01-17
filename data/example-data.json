@@ -1,0 +1,125 @@
+{
+  "propertyCategories": {
+    "DOGS": {
+      "image": null
+    },
+    "MONEY": {
+      "image": null
+    },
+    "EYES": {
+      "image": null
+    },
+    "HEIGHT": {
+      "image": null
+    },
+    "SPEED": {
+      "image": null
+    }
+  },
+  "picks": [
+    {
+      "id": "1",
+      "name": "Alice",
+      "properties": {
+        "DOGS": 10,
+        "MONEY": 5,
+        "EYES": 2,
+        "HEIGHT": 165,
+        "SPEED": 15
+      },
+      "image": null,
+      "propertyImages": {}
+    },
+    {
+      "id": "2",
+      "name": "Bob",
+      "properties": {
+        "DOGS": 3,
+        "MONEY": 20,
+        "EYES": 2,
+        "HEIGHT": 180,
+        "SPEED": 12
+      },
+      "image": null,
+      "propertyImages": {}
+    },
+    {
+      "id": "3",
+      "name": "Charlie",
+      "properties": {
+        "DOGS": 7,
+        "MONEY": 15,
+        "EYES": 2,
+        "HEIGHT": 175,
+        "SPEED": 18
+      },
+      "image": null,
+      "propertyImages": {}
+    },
+    {
+      "id": "4",
+      "name": "Diana",
+      "properties": {
+        "DOGS": 15,
+        "MONEY": 8,
+        "EYES": 2,
+        "HEIGHT": 170,
+        "SPEED": 20
+      },
+      "image": null,
+      "propertyImages": {}
+    },
+    {
+      "id": "5",
+      "name": "Eve",
+      "properties": {
+        "DOGS": 2,
+        "MONEY": 30,
+        "EYES": 2,
+        "HEIGHT": 160,
+        "SPEED": 10
+      },
+      "image": null,
+      "propertyImages": {}
+    },
+    {
+      "id": "6",
+      "name": "Frank",
+      "properties": {
+        "DOGS": 12,
+        "MONEY": 12,
+        "EYES": 2,
+        "HEIGHT": 185,
+        "SPEED": 14
+      },
+      "image": null,
+      "propertyImages": {}
+    },
+    {
+      "id": "7",
+      "name": "Grace",
+      "properties": {
+        "DOGS": 5,
+        "MONEY": 25,
+        "EYES": 2,
+        "HEIGHT": 168,
+        "SPEED": 16
+      },
+      "image": null,
+      "propertyImages": {}
+    },
+    {
+      "id": "8",
+      "name": "Henry",
+      "properties": {
+        "DOGS": 20,
+        "MONEY": 3,
+        "EYES": 2,
+        "HEIGHT": 178,
+        "SPEED": 22
+      },
+      "image": null,
+      "propertyImages": {}
+    }
+  ]
+}

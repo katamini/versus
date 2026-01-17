@@ -1,0 +1,22 @@
+{
+  "name": "versus",
+  "version": "1.0.0",
+  "description": "VERSUS - A colorful pixel-art quiz game engine for building browser-based guess games",
+  "main": "src/engine/GameEngine.js",
+  "scripts": {
+    "start": "npx http-server public -p 8080 -o",
+    "editor": "npx http-server public -p 8080 -o /editor.html"
+  },
+  "keywords": [
+    "game",
+    "quiz",
+    "pixel-art",
+    "browser-game",
+    "guessing-game"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

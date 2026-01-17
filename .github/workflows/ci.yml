@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Validate JSON files
+        run: |
+          find data -name "*.json" -exec node -e "JSON.parse(require('fs').readFileSync('{}', 'utf8'))" \;
+          echo "All JSON files are valid"
+      
+      - name: Check JavaScript syntax
+        run: |
+          node -c public/game.js
+          node -c public/editor.js
+          find src -name "*.js" -exec node -c {} \;
+          echo "All JavaScript files are valid"
+      
+      - name: Generate test database
+        run: |
+          node scripts/generate-db.js
+      
+      - name: Validate generated database
+        run: |
+          node scripts/validate-db.js
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Check for TODO/FIXME comments
+        run: |
+          ! grep -r "TODO\|FIXME" src/ public/ || echo "Found TODO/FIXME comments"
