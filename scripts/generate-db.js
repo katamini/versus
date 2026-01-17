@@ -108,12 +108,10 @@ function main() {
       // Generate SQL script
       generateSQLiteScript(jsonData, sqlPath);
       
-      // Copy JSON to public/data if not already there
+      // Always copy/sync JSON to public/data (overwrite to avoid stale data)
       const publicJsonPath = path.join(publicDataDir, jsonFile);
-      if (!fs.existsSync(publicJsonPath)) {
-        fs.copyFileSync(jsonPath, publicJsonPath);
-        console.log(`✓ Copied JSON to: ${publicJsonPath}`);
-      }
+      fs.copyFileSync(jsonPath, publicJsonPath);
+      console.log(`✓ Synced JSON to: ${publicJsonPath}`);
       
     } catch (error) {
       console.error(`✗ Error processing ${jsonFile}:`, error.message);

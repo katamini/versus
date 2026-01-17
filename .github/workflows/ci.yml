@@ -60,4 +60,9 @@ jobs:
       
       - name: Check for TODO/FIXME comments
         run: |
-          ! grep -r "TODO\|FIXME" src/ public/ || echo "Found TODO/FIXME comments"
+          if grep -r "TODO\|FIXME" src/ public/; then
+            echo "Found TODO/FIXME comments. Please remove or resolve them before merging."
+            exit 1
+          else
+            echo "No TODO/FIXME comments found in src/ or public/."
+          fi

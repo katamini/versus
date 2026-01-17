@@ -1,5 +1,3 @@
-const Pick = require('../models/Pick');
-
 /**
  * Base class for loading game data from various sources
  */

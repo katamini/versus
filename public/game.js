@@ -139,18 +139,31 @@ class JSONLoader extends DataLoader {
 class GameEngine {
   constructor(dataLoader, options = {}) {
     this.dataLoader = dataLoader;
+    
+    // Timer-related configuration with defaults
+    const {
+      initialTime = 10,
+      minTime = 3,
+      timeDecrement = 0.5,
+      optionsPerQuestion = 3,
+      ...otherOptions
+    } = options;
+
     this.options = {
-      optionsPerQuestion: options.optionsPerQuestion || 3,
-      ...options
+      optionsPerQuestion,
+      initialTime,
+      minTime,
+      timeDecrement,
+      ...otherOptions
     };
     
     this.score = 0;
     this.questionsAnswered = 0;
     this.currentQuestion = null;
     this.gameStarted = false;
-    this.initialTime = 10;
-    this.minTime = 3;
-    this.timeDecrement = 0.5;
+    this.initialTime = initialTime;
+    this.minTime = minTime;
+    this.timeDecrement = timeDecrement;
     this.currentTimeLimit = this.initialTime;
   }
 
@@ -212,7 +225,12 @@ class GameEngine {
       const otherOptions = this.dataLoader.findPicksWithSharedProperties(
         targetPick,
         this.options.optionsPerQuestion - 1
-      ).filter(p => p.id !== selectedOption.id);
+      ).filter(p => {
+        // Ensure other options don't also have values greater than target
+        if (p.id === selectedOption.id) return false;
+        const value = p.getPropertyValue(property);
+        return value === undefined || value <= targetPick.getPropertyValue(property);
+      });
 
       const options = [selectedOption, ...otherOptions].slice(0, this.options.optionsPerQuestion);
       

@@ -34,7 +34,7 @@ jobs:
       - name: Generate SQLite database
         run: |
           node scripts/generate-db.js
-          ls -lh public/data/*.db 2>/dev/null || echo "DB generation complete"
+          ls -lh public/data/*.sql public/data/*.json 2>/dev/null || echo "DB generation complete"
       
       - name: Validate database
         run: |
@@ -45,7 +45,7 @@ jobs:
         with:
           name: game-database
           path: |
-            public/data/*.db
+            public/data/*.sql
             public/data/*.json
           retention-days: 30
       
@@ -54,6 +54,6 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add public/data/*.db 2>/dev/null || true
+          git add public/data/*.sql public/data/*.json 2>/dev/null || true
           git diff --staged --quiet || git commit -m "chore: regenerate database [skip ci]"
           git push
