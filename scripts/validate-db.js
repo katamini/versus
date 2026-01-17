@@ -96,8 +96,9 @@ function validateSQL(sqlPath) {
     // Check for required tables
     const requiredTables = ['picks', 'properties', 'property_categories'];
     for (const table of requiredTables) {
-      if (!sql.includes(`CREATE TABLE`)) {
-        throw new Error(`Missing CREATE TABLE statements`);
+      const tablePattern = new RegExp(`CREATE\\s+TABLE\\s+(IF\\s+NOT\\s+EXISTS\\s+)?${table}`, 'i');
+      if (!tablePattern.test(sql)) {
+        throw new Error(`Missing CREATE TABLE ${table} statement`);
       }
     }
     

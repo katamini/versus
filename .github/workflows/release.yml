@@ -52,8 +52,9 @@ jobs:
       - name: Generate release notes
         id: release_notes
         run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
-          echo "## VERSUS Game Release ${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          echo "## VERSUS Game Release $TAG_NAME" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo "### What's Included" >> $GITHUB_OUTPUT
           echo "- Complete game engine with pixel-art UI" >> $GITHUB_OUTPUT
@@ -63,8 +64,8 @@ jobs:
           echo "" >> $GITHUB_OUTPUT
           echo "### CDN Usage" >> $GITHUB_OUTPUT
           echo '```html' >> $GITHUB_OUTPUT
-          echo '<script src="https://cdn.jsdelivr.net/gh/katamini/versus@${GITHUB_REF#refs/tags/}/dist/cdn/versus.min.js"></script>' >> $GITHUB_OUTPUT
-          echo '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/katamini/versus@${GITHUB_REF#refs/tags/}/dist/cdn/versus.min.css">' >> $GITHUB_OUTPUT
+          echo "<script src=\"https://cdn.jsdelivr.net/gh/katamini/versus@$TAG_NAME/dist/cdn/versus.min.js\"></script>" >> $GITHUB_OUTPUT
+          echo "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/katamini/versus@$TAG_NAME/dist/cdn/versus.min.css\">" >> $GITHUB_OUTPUT
           echo '```' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
       

@@ -19,9 +19,6 @@ class GameEngine {
     this.questionsAnswered = 0;
     this.currentQuestion = null;
     this.gameStarted = false;
-    this.streak = 0;
-    this.bestStreak = 0;
-    this.gameOver = false;
     this.initialTime = 10;
     this.minTime = 3;
     this.timeDecrement = 0.5;
@@ -45,8 +42,6 @@ class GameEngine {
   startGame() {
     this.score = 0;
     this.questionsAnswered = 0;
-    this.streak = 0;
-    this.gameOver = false;
     this.gameStarted = true;
     this.currentTimeLimit = this.initialTime;
     this.generateNextQuestion();
@@ -54,53 +49,70 @@ class GameEngine {
 
   /**
    * Generate the next question
+   * Uses slot machine retry behavior to ensure valid questions
    * @returns {Question|null}
    */
   generateNextQuestion() {
-    const targetPick = this.dataLoader.getRandomPick();
-    if (!targetPick) {
-      return null;
-    }
-
-    const sharedPropertyPicks = this.dataLoader.findPicksWithSharedProperties(
-      targetPick,
-      this.options.optionsPerQuestion
-    );
-
-    if (sharedPropertyPicks.length === 0) {
-      return this.generateNextQuestion();
-    }
-
-    const commonProperties = this.findCommonProperties(targetPick, sharedPropertyPicks);
-    if (commonProperties.length === 0) {
-      return this.generateNextQuestion();
-    }
-
-    const property = commonProperties[Math.floor(Math.random() * commonProperties.length)];
+    // Keep trying until we find a valid question (slot machine behavior)
+    let attempts = 0;
+    const maxAttempts = 100;
     
-    const validOptions = sharedPropertyPicks.filter(pick => {
-      const value = pick.getPropertyValue(property);
-      return value !== undefined && value > targetPick.getPropertyValue(property);
-    });
+    while (attempts < maxAttempts) {
+      attempts++;
+      
+      const targetPick = this.dataLoader.getRandomPick();
+      if (!targetPick) {
+        continue;
+      }
 
-    if (validOptions.length === 0) {
-      return this.generateNextQuestion();
+      const sharedPropertyPicks = this.dataLoader.findPicksWithSharedProperties(
+        targetPick,
+        this.options.optionsPerQuestion * 3 // Get more candidates
+      );
+
+      if (sharedPropertyPicks.length === 0) {
+        continue;
+      }
+
+      const commonProperties = this.findCommonProperties(targetPick, sharedPropertyPicks);
+      if (commonProperties.length === 0) {
+        continue;
+      }
+
+      const property = commonProperties[Math.floor(Math.random() * commonProperties.length)];
+      
+      const validOptions = sharedPropertyPicks.filter(pick => {
+        const value = pick.getPropertyValue(property);
+        return value !== undefined && value > targetPick.getPropertyValue(property);
+      });
+
+      if (validOptions.length === 0) {
+        continue;
+      }
+
+      const selectedOption = validOptions[Math.floor(Math.random() * validOptions.length)];
+      
+      const otherOptions = this.dataLoader.findPicksWithSharedProperties(
+        targetPick,
+        this.options.optionsPerQuestion - 1
+      ).filter(p => p.id !== selectedOption.id);
+
+      const options = [selectedOption, ...otherOptions].slice(0, this.options.optionsPerQuestion);
+      
+      if (options.length < this.options.optionsPerQuestion) {
+        continue;
+      }
+      
+      this.shuffleArray(options);
+
+      const propertyImage = this.dataLoader.getPropertyCategoryImage(property);
+      this.currentQuestion = new Question(targetPick, options, property, propertyImage);
+      
+      return this.currentQuestion;
     }
-
-    const selectedOption = validOptions[Math.floor(Math.random() * validOptions.length)];
     
-    const otherOptions = this.dataLoader.findPicksWithSharedProperties(
-      targetPick,
-      this.options.optionsPerQuestion - 1
-    ).filter(p => p.id !== selectedOption.id);
-
-    const options = [selectedOption, ...otherOptions].slice(0, this.options.optionsPerQuestion);
-    this.shuffleArray(options);
-
-    const propertyImage = this.dataLoader.getPropertyCategoryImage(property);
-    this.currentQuestion = new Question(targetPick, options, property, propertyImage);
-    
-    return this.currentQuestion;
+    // If we couldn't find a question after max attempts, return null
+    return null;
   }
 
   /**
@@ -148,13 +160,7 @@ class GameEngine {
 
     if (isCorrect) {
       this.score++;
-      this.streak++;
-      if (this.streak > this.bestStreak) {
-        this.bestStreak = this.streak;
-      }
       this.currentTimeLimit = Math.max(this.minTime, this.currentTimeLimit - this.timeDecrement);
-    } else {
-      this.gameOver = true;
     }
 
     return isCorrect;
@@ -192,29 +198,7 @@ class GameEngine {
     return this.gameStarted;
   }
 
-  /**
-   * Get current streak
-   * @returns {number}
-   */
-  getStreak() {
-    return this.streak;
-  }
 
-  /**
-   * Get best streak
-   * @returns {number}
-   */
-  getBestStreak() {
-    return this.bestStreak;
-  }
-
-  /**
-   * Check if game is over
-   * @returns {boolean}
-   */
-  isGameOver() {
-    return this.gameOver;
-  }
 
   /**
    * Get current time limit
