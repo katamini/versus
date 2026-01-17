@@ -1,0 +1,59 @@
+name: Build Database
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/**'
+      - 'scripts/generate-db.js'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'data/**'
+      - 'scripts/generate-db.js'
+  workflow_dispatch:
+
+jobs:
+  generate-db:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Generate SQLite database
+        run: |
+          node scripts/generate-db.js
+          ls -lh public/data/*.db 2>/dev/null || echo "DB generation complete"
+      
+      - name: Validate database
+        run: |
+          node scripts/validate-db.js
+      
+      - name: Upload database artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-database
+          path: |
+            public/data/*.db
+            public/data/*.json
+          retention-days: 30
+      
+      - name: Commit generated files
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add public/data/*.db 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "chore: regenerate database [skip ci]"
+          git push

@@ -1,0 +1,109 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Generate database
+        run: |
+          node scripts/generate-db.js
+          echo "Database generated successfully"
+      
+      - name: Create distribution package
+        run: |
+          mkdir -p dist
+          cp -r public/* dist/
+          cp README.md dist/
+          cp LICENSE dist/ 2>/dev/null || echo "MIT" > dist/LICENSE
+          
+          # Create CDN-ready structure
+          mkdir -p dist/cdn
+          cp public/game.js dist/cdn/versus.min.js
+          cp public/styles.css dist/cdn/versus.min.css
+          cp -r public/data dist/cdn/
+          
+          # Create archive
+          cd dist
+          zip -r ../versus-game.zip .
+          cd ..
+          tar -czf versus-game.tar.gz -C dist .
+      
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
+          echo "## VERSUS Game Release ${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "### What's Included" >> $GITHUB_OUTPUT
+          echo "- Complete game engine with pixel-art UI" >> $GITHUB_OUTPUT
+          echo "- Database editor for creating game content" >> $GITHUB_OUTPUT
+          echo "- Example game data" >> $GITHUB_OUTPUT
+          echo "- CDN-ready files for easy integration" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "### CDN Usage" >> $GITHUB_OUTPUT
+          echo '```html' >> $GITHUB_OUTPUT
+          echo '<script src="https://cdn.jsdelivr.net/gh/katamini/versus@${GITHUB_REF#refs/tags/}/dist/cdn/versus.min.js"></script>' >> $GITHUB_OUTPUT
+          echo '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/katamini/versus@${GITHUB_REF#refs/tags/}/dist/cdn/versus.min.css">' >> $GITHUB_OUTPUT
+          echo '```' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            versus-game.zip
+            versus-game.tar.gz
+            dist/cdn/versus.min.js
+            dist/cdn/versus.min.css
+            public/data/example-data.json
+          body: ${{ steps.release_notes.outputs.RELEASE_NOTES }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Generate CDN index
+        run: |
+          cat > dist/cdn/README.md << 'EOF'
+          # VERSUS Game CDN Files
+          
+          Use these files via CDN in your HTML:
+          
+          ## jsDelivr (Recommended)
+          ```html
+          <script src="https://cdn.jsdelivr.net/gh/katamini/versus@latest/dist/cdn/versus.min.js"></script>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/katamini/versus@latest/dist/cdn/versus.min.css">
+          ```
+          
+          ## unpkg
+          ```html
+          <script src="https://unpkg.com/browse/versus@latest/dist/cdn/versus.min.js"></script>
+          <link rel="stylesheet" href="https://unpkg.com/browse/versus@latest/dist/cdn/versus.min.css">
+          ```
+          
+          ## GitHub Raw (Not recommended for production)
+          ```html
+          <script src="https://raw.githubusercontent.com/katamini/versus/main/dist/cdn/versus.min.js"></script>
+          ```
+          EOF

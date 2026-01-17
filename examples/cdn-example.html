@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERSUS Game - CDN Example</title>
+    
+    <!-- Load from CDN (jsDelivr) -->
+    <!-- Replace 'main' with specific version tag like 'v1.0.0' for production -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/katamini/versus@main/public/styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <h1 class="game-title pixel-text">VERSUS</h1>
+            <div class="score-display">
+                <span class="score-label pixel-text">STREAK:</span>
+                <span id="score" class="score-value pixel-text">0</span>
+                <span class="score-label pixel-text" style="margin-left: 15px;">BEST:</span>
+                <span id="best-score" class="score-value pixel-text">0</span>
+                <span class="score-label pixel-text" style="margin-left: 15px;">TIME:</span>
+                <span id="timer" class="score-value pixel-text timer-display">10.0s</span>
+            </div>
+        </header>
+
+        <div id="start-screen" class="screen active">
+            <div class="start-content">
+                <h2 class="pixel-text">WELCOME TO VERSUS!</h2>
+                <p class="pixel-text">Compare characters and guess who has more!</p>
+                <button id="start-button" class="pixel-button">START GAME</button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <div class="question-container">
+                <div class="target-pick">
+                    <div id="target-image" class="pick-image"></div>
+                    <h3 id="target-name" class="pick-name pixel-text"></h3>
+                </div>
+
+                <div class="question-text">
+                    <p id="question" class="pixel-text"></p>
+                    <div id="property-image" class="property-image"></div>
+                </div>
+
+                <div class="options-container" id="options">
+                    <!-- Options will be dynamically generated -->
+                </div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="screen">
+            <div class="result-content">
+                <h2 id="result-title" class="pixel-text"></h2>
+                <p id="result-message" class="pixel-text"></p>
+                <button id="continue-button" class="pixel-button">CONTINUE</button>
+            </div>
+        </div>
+
+        <div id="gameover-screen" class="screen">
+            <div class="result-content">
+                <h2 class="pixel-text" style="color: #ef4444;">GAME OVER!</h2>
+                <p id="final-score" class="pixel-text"></p>
+                <button id="restart-button" class="pixel-button">PLAY AGAIN</button>
+            </div>
+        </div>
+
+        <div id="loading-screen" class="screen">
+            <div class="loading-content">
+                <p class="pixel-text">LOADING...</p>
+            </div>
+        </div>
+
+        <div id="ready-overlay" class="ready-overlay">
+            <div class="ready-text pixel-text"></div>
+        </div>
+    </div>
+
+    <!-- Load game engine from CDN -->
+    <script src="https://cdn.jsdelivr.net/gh/katamini/versus@main/public/game.js"></script>
+    
+    <!-- Or use a specific version for production: -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/katamini/versus@v1.0.0/public/game.js"></script> -->
+    
+    <!-- Load your custom game data from your own repository or server -->
+    <script>
+        // Override the default data source
+        document.addEventListener('DOMContentLoaded', async () => {
+            // You can load data from your own GitHub repo or server
+            const dataLoader = new JSONLoader('https://cdn.jsdelivr.net/gh/katamini/versus@main/public/data/example-data.json');
+            // Or from your own server:
+            // const dataLoader = new JSONLoader('https://yourdomain.com/game-data.json');
+            
+            const gameEngine = new GameEngine(dataLoader);
+            const gameUI = new GameUI(gameEngine);
+            
+            await gameUI.initialize();
+        });
+    </script>
+</body>
+</html>
