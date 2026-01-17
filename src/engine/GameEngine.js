@@ -22,6 +22,10 @@ class GameEngine {
     this.streak = 0;
     this.bestStreak = 0;
     this.gameOver = false;
+    this.initialTime = 10;
+    this.minTime = 3;
+    this.timeDecrement = 0.5;
+    this.currentTimeLimit = this.initialTime;
   }
 
   /**
@@ -44,6 +48,7 @@ class GameEngine {
     this.streak = 0;
     this.gameOver = false;
     this.gameStarted = true;
+    this.currentTimeLimit = this.initialTime;
     this.generateNextQuestion();
   }
 
@@ -147,6 +152,7 @@ class GameEngine {
       if (this.streak > this.bestStreak) {
         this.bestStreak = this.streak;
       }
+      this.currentTimeLimit = Math.max(this.minTime, this.currentTimeLimit - this.timeDecrement);
     } else {
       this.gameOver = true;
     }
@@ -208,6 +214,14 @@ class GameEngine {
    */
   isGameOver() {
     return this.gameOver;
+  }
+
+  /**
+   * Get current time limit
+   * @returns {number}
+   */
+  getCurrentTimeLimit() {
+    return this.currentTimeLimit;
   }
 }
 

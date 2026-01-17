@@ -546,7 +546,7 @@ class GameUI {
     const question = this.gameEngine.getCurrentQuestion();
     allOptions[question.correctAnswer].classList.add('correct');
     
-    this.gameEngine.questionsAnswered++;
+    this.gameEngine.submitAnswer(-1);
     this.updateScore();
 
     setTimeout(() => {
