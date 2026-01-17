@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERSUS - Database Editor</title>
+    <link rel="stylesheet" href="editor-styles.css">
+</head>
+<body>
+    <div class="editor-container">
+        <header class="editor-header">
+            <h1 class="pixel-text">DATABASE EDITOR</h1>
+            <div class="header-actions">
+                <button id="import-button" class="pixel-button small">IMPORT</button>
+                <button id="export-button" class="pixel-button small">EXPORT JSON</button>
+                <button id="export-sqlite-button" class="pixel-button small">EXPORT SQLITE</button>
+            </div>
+        </header>
+
+        <div class="editor-content">
+            <!-- Property Categories Section -->
+            <section class="editor-section">
+                <div class="section-header">
+                    <h2 class="pixel-text">PROPERTY CATEGORIES</h2>
+                    <button id="add-category-button" class="pixel-button small">+ ADD</button>
+                </div>
+                <div id="categories-list" class="categories-list">
+                    <!-- Categories will be added here -->
+                </div>
+            </section>
+
+            <!-- Picks Section -->
+            <section class="editor-section">
+                <div class="section-header">
+                    <h2 class="pixel-text">PICKS</h2>
+                    <button id="add-pick-button" class="pixel-button small">+ ADD</button>
+                </div>
+                <div id="picks-list" class="picks-list">
+                    <!-- Picks will be added here -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Category Modal -->
+        <div id="category-modal" class="modal">
+            <div class="modal-content">
+                <h3 class="pixel-text">EDIT CATEGORY</h3>
+                <div class="form-group">
+                    <label class="pixel-text">Name:</label>
+                    <input type="text" id="category-name" class="pixel-input">
+                </div>
+                <div class="form-group">
+                    <label class="pixel-text">Image URL:</label>
+                    <input type="text" id="category-image" class="pixel-input" placeholder="Optional">
+                </div>
+                <div class="modal-actions">
+                    <button id="save-category-button" class="pixel-button">SAVE</button>
+                    <button id="cancel-category-button" class="pixel-button">CANCEL</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pick Modal -->
+        <div id="pick-modal" class="modal">
+            <div class="modal-content large">
+                <h3 class="pixel-text">EDIT PICK</h3>
+                <div class="form-group">
+                    <label class="pixel-text">ID:</label>
+                    <input type="text" id="pick-id" class="pixel-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="pixel-text">Name:</label>
+                    <input type="text" id="pick-name" class="pixel-input">
+                </div>
+                <div class="form-group">
+                    <label class="pixel-text">Image URL:</label>
+                    <input type="text" id="pick-image" class="pixel-input" placeholder="Optional">
+                </div>
+                <div class="form-group">
+                    <label class="pixel-text">Properties:</label>
+                    <div id="properties-editor" class="properties-editor">
+                        <!-- Properties will be added here -->
+                    </div>
+                    <button id="add-property-button" class="pixel-button small">+ ADD PROPERTY</button>
+                </div>
+                <div class="modal-actions">
+                    <button id="save-pick-button" class="pixel-button">SAVE</button>
+                    <button id="cancel-pick-button" class="pixel-button">CANCEL</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Import Modal -->
+        <div id="import-modal" class="modal">
+            <div class="modal-content large">
+                <h3 class="pixel-text">IMPORT DATA</h3>
+                <div class="form-group">
+                    <label class="pixel-text">Paste JSON data:</label>
+                    <textarea id="import-data" class="pixel-textarea" rows="15"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button id="import-confirm-button" class="pixel-button">IMPORT</button>
+                    <button id="cancel-import-button" class="pixel-button">CANCEL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="file-input" style="display: none;" accept=".json">
+
+    <script src="editor.js"></script>
+</body>
+</html>
