@@ -311,6 +311,7 @@ class GameEngine {
 class GameUI {
   constructor(gameEngine) {
     this.gameEngine = gameEngine;
+    this.TIMEOUT_ANSWER = -1;
     this.screens = {
       loading: document.getElementById('loading-screen'),
       start: document.getElementById('start-screen'),
@@ -546,7 +547,7 @@ class GameUI {
     const question = this.gameEngine.getCurrentQuestion();
     allOptions[question.correctAnswer].classList.add('correct');
     
-    this.gameEngine.submitAnswer(-1);
+    this.gameEngine.submitAnswer(this.TIMEOUT_ANSWER);
     this.updateScore();
 
     setTimeout(() => {
