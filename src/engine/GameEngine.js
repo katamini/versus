@@ -198,8 +198,6 @@ class GameEngine {
     return this.gameStarted;
   }
 
-
-
   /**
    * Get current time limit
    * @returns {number}
