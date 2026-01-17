@@ -148,10 +148,6 @@ class GameEngine {
     this.questionsAnswered = 0;
     this.currentQuestion = null;
     this.gameStarted = false;
-    this.initialTime = 10;
-    this.minTime = 3;
-    this.timeDecrement = 0.5;
-    this.currentTimeLimit = this.initialTime;
   }
 
   async initialize() {
@@ -165,7 +161,6 @@ class GameEngine {
     this.score = 0;
     this.questionsAnswered = 0;
     this.gameStarted = true;
-    this.currentTimeLimit = this.initialTime;
     this.generateNextQuestion();
   }
 
@@ -262,7 +257,6 @@ class GameEngine {
 
     if (isCorrect) {
       this.score++;
-      this.currentTimeLimit = Math.max(this.minTime, this.currentTimeLimit - this.timeDecrement);
     }
 
     return isCorrect;
@@ -283,28 +277,6 @@ class GameEngine {
   isGameStarted() {
     return this.gameStarted;
   }
-
-  getCurrentTimeLimit() {
-    return this.currentTimeLimit;
-  }
-
-  getStreak() {
-    return this.score;
-  }
-
-  getBestStreak() {
-    const saved = localStorage.getItem('bestStreak');
-    const best = saved ? parseInt(saved) : 0;
-    if (this.score > best) {
-      localStorage.setItem('bestStreak', this.score.toString());
-      return this.score;
-    }
-    return best;
-  }
-
-  isGameOver() {
-    return !this.gameStarted || this.score < this.questionsAnswered;
-  }
 }
 
 // UI Controller
@@ -322,7 +294,6 @@ class GameUI {
     this.elements = {
       score: document.getElementById('score'),
       bestScore: document.getElementById('best-score'),
-      timer: document.getElementById('timer'),
       targetImage: document.getElementById('target-image'),
       targetName: document.getElementById('target-name'),
       question: document.getElementById('question'),
@@ -333,12 +304,9 @@ class GameUI {
       finalScore: document.getElementById('final-score'),
       startButton: document.getElementById('start-button'),
       continueButton: document.getElementById('continue-button'),
-      restartButton: document.getElementById('restart-button'),
-      readyOverlay: document.getElementById('ready-overlay')
+      restartButton: document.getElementById('restart-button')
     };
 
-    this.timerInterval = null;
-    this.timeRemaining = 0;
     this.setupEventListeners();
   }
 
@@ -349,7 +317,6 @@ class GameUI {
   }
 
   showScreen(screenName) {
-    this.clearTimer();
     Object.values(this.screens).forEach(screen => screen.classList.remove('active'));
     this.screens[screenName].classList.add('active');
   }
@@ -365,86 +332,24 @@ class GameUI {
     }
   }
 
-  async startGame() {
+  startGame() {
     this.gameEngine.startGame();
     this.updateScore();
-    this.showScreen('game');
-    await this.showReadyAnimation();
     this.displayQuestion();
+    this.showScreen('game');
   }
 
-  async showReadyAnimation() {
-    const overlay = this.elements.readyOverlay;
-    const words = ['READY...', 'SET...', 'GO!'];
-    
-    for (const word of words) {
-      overlay.textContent = word;
-      overlay.classList.add('active');
-      await new Promise(resolve => setTimeout(resolve, 600));
-      overlay.classList.remove('active');
-      await new Promise(resolve => setTimeout(resolve, 200));
-    }
-  }
-
-  async displayQuestion() {
+  displayQuestion() {
     const question = this.gameEngine.getCurrentQuestion();
     if (!question) {
       alert('No more questions available!');
       return;
     }
 
-    await this.showSlotMachineAnimation(question);
-    this.startTimer();
-  }
-
-  async showSlotMachineAnimation(question) {
-    const targetPick = question.targetPick;
-    const allPicks = this.gameEngine.dataLoader.getPicks();
-    const shuffleCount = 8;
-    const shuffleDuration = 60;
-
-    // Display options
-    this.elements.options.innerHTML = '';
-    question.options.forEach((option, index) => {
-      const optionCard = document.createElement('div');
-      optionCard.className = 'option-card';
-      
-      const optionImage = document.createElement('div');
-      optionImage.className = 'option-image';
-      
-      const optionName = document.createElement('div');
-      optionName.className = 'option-name pixel-text';
-
-      const optionValue = document.createElement('div');
-      optionValue.className = 'option-value pixel-text';
-      
-      optionCard.appendChild(optionImage);
-      optionCard.appendChild(optionName);
-      optionCard.appendChild(optionValue);
-      
-      optionCard.addEventListener('click', () => this.handleAnswer(index, optionCard));
-      
-      this.elements.options.appendChild(optionCard);
-    });
-
-    const optionCards = Array.from(this.elements.options.children);
-
-    // Animate target pick
-    for (let i = 0; i < shuffleCount; i++) {
-      const randomPick = allPicks[Math.floor(Math.random() * allPicks.length)];
-      this.elements.targetName.textContent = randomPick.name;
-      if (randomPick.image) {
-        this.elements.targetImage.innerHTML = `<img src="${randomPick.image}" alt="${randomPick.name}">`;
-      } else {
-        this.elements.targetImage.innerHTML = '👤';
-      }
-      await new Promise(resolve => setTimeout(resolve, shuffleDuration));
-    }
-
-    // Set final target
-    this.elements.targetName.textContent = targetPick.name;
-    if (targetPick.image) {
-      this.elements.targetImage.innerHTML = `<img src="${targetPick.image}" alt="${targetPick.name}">`;
+    // Display target pick
+    this.elements.targetName.textContent = question.targetPick.name;
+    if (question.targetPick.image) {
+      this.elements.targetImage.innerHTML = `<img src="${question.targetPick.image}" alt="${question.targetPick.name}">`;
     } else {
       this.elements.targetImage.innerHTML = '👤';
     }
@@ -460,103 +365,39 @@ class GameUI {
       this.elements.propertyImage.classList.remove('visible');
     }
 
-    // Animate options
-    for (let i = 0; i < shuffleCount; i++) {
-      optionCards.forEach((card, index) => {
-        const randomPick = allPicks[Math.floor(Math.random() * allPicks.length)];
-        const optionImage = card.querySelector('.option-image');
-        const optionName = card.querySelector('.option-name');
-        const optionValue = card.querySelector('.option-value');
-
-        optionName.textContent = randomPick.name;
-        if (randomPick.image) {
-          optionImage.innerHTML = `<img src="${randomPick.image}" alt="${randomPick.name}">`;
-        } else {
-          optionImage.textContent = '👤';
-        }
-        optionValue.textContent = `???`;
-      });
-      await new Promise(resolve => setTimeout(resolve, shuffleDuration));
-    }
-
-    // Set final options
-    optionCards.forEach((card, index) => {
-      const option = question.options[index];
-      const optionImage = card.querySelector('.option-image');
-      const optionName = card.querySelector('.option-name');
-      const optionValue = card.querySelector('.option-value');
-
-      optionName.textContent = option.name;
+    // Display options
+    this.elements.options.innerHTML = '';
+    question.options.forEach((option, index) => {
+      const optionCard = document.createElement('div');
+      optionCard.className = 'option-card';
+      
+      const optionImage = document.createElement('div');
+      optionImage.className = 'option-image';
       if (option.image) {
         optionImage.innerHTML = `<img src="${option.image}" alt="${option.name}">`;
       } else {
         optionImage.textContent = '👤';
       }
+      
+      const optionName = document.createElement('div');
+      optionName.className = 'option-name pixel-text';
+      optionName.textContent = option.name;
+
+      const optionValue = document.createElement('div');
+      optionValue.className = 'option-value pixel-text';
       optionValue.textContent = `${question.property}: ${option.getPropertyValue(question.property)}`;
+      
+      optionCard.appendChild(optionImage);
+      optionCard.appendChild(optionName);
+      optionCard.appendChild(optionValue);
+      
+      optionCard.addEventListener('click', () => this.handleAnswer(index, optionCard));
+      
+      this.elements.options.appendChild(optionCard);
     });
-  }
-
-  startTimer() {
-    this.clearTimer();
-    this.timeRemaining = this.gameEngine.getCurrentTimeLimit();
-    this.updateTimerDisplay();
-
-    this.timerInterval = setInterval(() => {
-      this.timeRemaining -= 0.1;
-      if (this.timeRemaining <= 0) {
-        this.timeRemaining = 0;
-        this.clearTimer();
-        this.handleTimeout();
-      }
-      this.updateTimerDisplay();
-    }, 100);
-  }
-
-  clearTimer() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
-    if (this.elements.timer) {
-      this.elements.timer.classList.remove('low', 'critical');
-    }
-  }
-
-  updateTimerDisplay() {
-    if (!this.elements.timer) return;
-    
-    const display = Math.max(0, this.timeRemaining).toFixed(1);
-    this.elements.timer.textContent = display + 's';
-
-    this.elements.timer.classList.remove('low', 'critical');
-    if (this.timeRemaining <= 2) {
-      this.elements.timer.classList.add('critical');
-    } else if (this.timeRemaining <= 4) {
-      this.elements.timer.classList.add('low');
-    }
-  }
-
-  handleTimeout() {
-    const allOptions = document.querySelectorAll('.option-card');
-    allOptions.forEach(card => {
-      card.style.pointerEvents = 'none';
-      card.classList.add('revealed');
-    });
-
-    const question = this.gameEngine.getCurrentQuestion();
-    allOptions[question.correctAnswer].classList.add('correct');
-    
-    this.gameEngine.questionsAnswered++;
-    this.updateScore();
-
-    setTimeout(() => {
-      this.showGameOver();
-    }, 2000);
   }
 
   handleAnswer(answerIndex, optionCard) {
-    this.clearTimer();
-    
     const question = this.gameEngine.getCurrentQuestion();
     const isCorrect = this.gameEngine.submitAnswer(answerIndex);
 
@@ -601,10 +442,10 @@ class GameUI {
     this.showScreen('result');
   }
 
-  async continueGame() {
+  continueGame() {
     this.gameEngine.generateNextQuestion();
+    this.displayQuestion();
     this.showScreen('game');
-    await this.displayQuestion();
   }
 
   showGameOver() {

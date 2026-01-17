@@ -66,6 +66,27 @@ body {
     margin-left: 10px;
 }
 
+.timer-value {
+    color: #4ade80;
+    font-size: 16px;
+    margin-left: 10px;
+    transition: color 0.3s;
+}
+
+.timer-value.low {
+    color: #fbbf24;
+}
+
+.timer-value.critical {
+    color: #ef4444;
+    animation: timer-pulse 0.5s infinite;
+}
+
+@keyframes timer-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
 .screen {
     display: none;
     padding: 40px 20px;
@@ -312,6 +333,32 @@ body {
     50% { opacity: 0.5; }
 }
 
+/* Ready Overlay */
+.ready-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    color: #ffd700;
+    z-index: 1000;
+    animation: ready-fade-in 0.2s;
+}
+
+.ready-overlay.active {
+    display: flex;
+}
+
+@keyframes ready-fade-in {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
 /* Responsive */
 @media (max-width: 600px) {
     .game-title {
@@ -320,7 +367,8 @@ body {
     }
     
     .score-label,
-    .score-value {
+    .score-value,
+    .timer-value {
         font-size: 10px;
     }
     
@@ -351,5 +399,9 @@ body {
     
     .options-container {
         grid-template-columns: 1fr;
+    }
+
+    .ready-overlay {
+        font-size: 32px;
     }
 }
