@@ -1,5 +1,5 @@
 -- VERSUS Game Database
--- Generated: 2026-01-18T23:41:45.184Z
+-- Generated: 2026-01-18T23:43:29.275Z
 
 CREATE TABLE IF NOT EXISTS picks (
   id TEXT PRIMARY KEY,
