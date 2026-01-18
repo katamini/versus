@@ -23,6 +23,37 @@ function validateJSON(jsonPath) {
       throw new Error('No picks defined in database');
     }
     
+    if (!data.facts || !Array.isArray(data.facts)) {
+      throw new Error('Missing or invalid "facts" array');
+    }
+    
+    if (data.facts.length === 0) {
+      throw new Error('No facts defined in database');
+    }
+    
+    // Validate facts
+    const factIds = new Set();
+    for (let i = 0; i < data.facts.length; i++) {
+      const fact = data.facts[i];
+      
+      if (!fact.id) {
+        throw new Error(`Fact at index ${i} is missing an 'id' field`);
+      }
+      
+      if (factIds.has(fact.id)) {
+        throw new Error(`Duplicate fact id: ${fact.id}`);
+      }
+      factIds.add(fact.id);
+      
+      if (!fact.description) {
+        throw new Error(`Fact ${fact.id} is missing a 'description' field`);
+      }
+      
+      if (!fact.category) {
+        throw new Error(`Fact ${fact.id} is missing a 'category' field`);
+      }
+    }
+    
     // Validate each pick
     const pickIds = new Set();
     for (let i = 0; i < data.picks.length; i++) {
@@ -41,44 +72,48 @@ function validateJSON(jsonPath) {
         throw new Error(`Pick ${pick.id} is missing a 'name' field`);
       }
       
-      if (!pick.properties || typeof pick.properties !== 'object') {
-        throw new Error(`Pick ${pick.id} is missing or has invalid 'properties' object`);
+      if (!pick.factIds || !Array.isArray(pick.factIds)) {
+        throw new Error(`Pick ${pick.id} is missing or has invalid 'factIds' array`);
       }
       
-      if (Object.keys(pick.properties).length === 0) {
-        throw new Error(`Pick ${pick.id} has no properties defined`);
+      if (pick.factIds.length === 0) {
+        throw new Error(`Pick ${pick.id} has no facts assigned`);
       }
       
-      // Validate property values are numbers
-      for (const [prop, value] of Object.entries(pick.properties)) {
-        if (typeof value !== 'number') {
-          throw new Error(`Pick ${pick.id} property '${prop}' has non-numeric value: ${value}`);
+      // Validate that factIds reference existing facts
+      for (const factId of pick.factIds) {
+        if (!factIds.has(factId)) {
+          throw new Error(`Pick ${pick.id} references non-existent fact: ${factId}`);
         }
       }
     }
     
     console.log(`  ✓ Valid structure`);
+    console.log(`  ✓ ${data.facts.length} facts validated`);
     console.log(`  ✓ ${data.picks.length} picks validated`);
     console.log(`  ✓ ${pickIds.size} unique pick IDs`);
     
-    // Check for property overlap (needed for gameplay)
-    const propertyCount = new Map();
+    // Check for fact distribution (needed for gameplay)
+    const factUsageCount = new Map();
     for (const pick of data.picks) {
-      for (const prop of Object.keys(pick.properties)) {
-        propertyCount.set(prop, (propertyCount.get(prop) || 0) + 1);
+      for (const factId of pick.factIds) {
+        factUsageCount.set(factId, (factUsageCount.get(factId) || 0) + 1);
       }
     }
     
-    console.log(`  ✓ ${propertyCount.size} unique properties found`);
-    
-    const sharedProperties = Array.from(propertyCount.entries())
+    const sharedFacts = Array.from(factUsageCount.entries())
       .filter(([_, count]) => count > 1);
     
-    if (sharedProperties.length === 0) {
-      console.warn(`  ⚠ Warning: No properties are shared between picks. Game may not function well.`);
-    } else {
-      console.log(`  ✓ ${sharedProperties.length} properties shared across multiple picks`);
+    if (sharedFacts.length > 0) {
+      console.warn(`  ⚠ Warning: ${sharedFacts.length} facts are shared by multiple picks. This may reduce game variety.`);
     }
+    
+    const picksWithoutFacts = data.picks.filter(p => !p.factIds || p.factIds.length === 0).length;
+    if (picksWithoutFacts > 0) {
+      console.warn(`  ⚠ Warning: ${picksWithoutFacts} picks have no facts assigned`);
+    }
+    
+    console.log(`  ✓ All fact references are valid`);
     
     return true;
   } catch (error) {
@@ -94,7 +129,7 @@ function validateSQL(sqlPath) {
     const sql = fs.readFileSync(sqlPath, 'utf8');
     
     // Check for required tables
-    const requiredTables = ['picks', 'properties', 'property_categories'];
+    const requiredTables = ['picks', 'facts', 'pick_facts'];
     for (const table of requiredTables) {
       const tablePattern = new RegExp(`CREATE\\s+TABLE\\s+(IF\\s+NOT\\s+EXISTS\\s+)?${table}`, 'i');
       if (!tablePattern.test(sql)) {
@@ -107,8 +142,12 @@ function validateSQL(sqlPath) {
       throw new Error('No picks inserted');
     }
     
-    if (!sql.includes('INSERT INTO properties')) {
-      throw new Error('No properties inserted');
+    if (!sql.includes('INSERT INTO facts')) {
+      throw new Error('No facts inserted');
+    }
+    
+    if (!sql.includes('INSERT INTO pick_facts')) {
+      throw new Error('No pick_facts relationships inserted');
     }
     
     console.log(`  ✓ SQL structure is valid`);

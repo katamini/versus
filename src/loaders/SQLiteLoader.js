@@ -1,5 +1,6 @@
 const DataLoader = require('./DataLoader');
 const Pick = require('../models/Pick');
+const Fact = require('../models/Fact');
 
 /**
  * Loads game data from SQLite database
@@ -50,66 +51,57 @@ class SQLiteLoader extends DataLoader {
    * Parse SQLite database structure
    * Expected tables:
    * - picks (id, name, image)
-   * - properties (pick_id, property_name, value, image)
-   * - property_categories (name, image)
+   * - facts (id, description, category, image)
+   * - pick_facts (pick_id, fact_id)
    */
   parseDatabase() {
     const picksResult = this.db.exec('SELECT * FROM picks');
-    const propertiesResult = this.db.exec('SELECT * FROM properties');
-    
-    let categoriesResult;
-    try {
-      categoriesResult = this.db.exec('SELECT * FROM property_categories');
-    } catch (e) {
-      categoriesResult = [];
-    }
+    const factsResult = this.db.exec('SELECT * FROM facts');
+    const pickFactsResult = this.db.exec('SELECT * FROM pick_facts');
 
-    if (categoriesResult.length > 0) {
-      const categoriesData = categoriesResult[0];
-      categoriesData.values.forEach(row => {
-        const [name, image] = row;
-        this.propertyCategories[name] = { image };
+    // Parse facts
+    if (factsResult.length > 0) {
+      const factsData = factsResult[0];
+      factsData.values.forEach(row => {
+        const [id, description, category, image] = row;
+        this.facts.push(new Fact(id, description, category, image || null));
       });
     }
 
     if (picksResult.length === 0) return;
 
     const picksData = picksResult[0];
-    const propertiesData = propertiesResult.length > 0 ? propertiesResult[0] : null;
-
     const picksMap = new Map();
 
+    // Parse picks
     picksData.values.forEach(row => {
       const id = row[0].toString();
       const name = row[1];
       const image = row[2] || null;
-      picksMap.set(id, { id, name, image, properties: {}, propertyImages: {} });
+      picksMap.set(id, { id, name, image, factIds: [] });
     });
 
-    if (propertiesData) {
-      propertiesData.values.forEach(row => {
+    // Parse pick_facts relationships
+    if (pickFactsResult.length > 0) {
+      const pickFactsData = pickFactsResult[0];
+      pickFactsData.values.forEach(row => {
         const pickId = row[0].toString();
-        const propertyName = row[1];
-        const value = row[2];
-        const image = row[3] || null;
+        const factId = row[1];
 
         if (picksMap.has(pickId)) {
           const pick = picksMap.get(pickId);
-          pick.properties[propertyName] = value;
-          if (image) {
-            pick.propertyImages[propertyName] = image;
-          }
+          pick.factIds.push(factId);
         }
       });
     }
 
+    // Create Pick objects
     this.picks = Array.from(picksMap.values()).map(pickData => {
       return new Pick(
         pickData.id,
         pickData.name,
-        pickData.properties,
-        pickData.image,
-        pickData.propertyImages
+        pickData.factIds,
+        pickData.image
       );
     });
   }
