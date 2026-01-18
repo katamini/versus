@@ -259,11 +259,11 @@ class DatabaseEditor {
       const jsonData = JSON.parse(this.elements.importData.value);
       
       if (!jsonData.picks || !Array.isArray(jsonData.picks)) {
-        throw new Error('Invalid data format: "picks" array is required');
+        throw new Error('Invalid data format: "picks" must be an array of pick objects');
       }
       
       if (!jsonData.facts || !Array.isArray(jsonData.facts)) {
-        throw new Error('Invalid data format: "facts" array is required');
+        throw new Error('Invalid data format: "facts" must be an array of fact objects');
       }
       
       this.data = {
