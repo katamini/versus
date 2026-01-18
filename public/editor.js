@@ -3,26 +3,28 @@
 class DatabaseEditor {
   constructor() {
     this.data = {
-      propertyCategories: {},
+      facts: [],
       picks: []
     };
     
-    this.currentEditingCategory = null;
+    this.currentEditingFactId = null;
     this.currentEditingPick = null;
     
     this.elements = {
-      categoriesList: document.getElementById('categories-list'),
+      factsList: document.getElementById('facts-list'),
       picksList: document.getElementById('picks-list'),
       
-      categoryModal: document.getElementById('category-modal'),
-      categoryName: document.getElementById('category-name'),
-      categoryImage: document.getElementById('category-image'),
+      factModal: document.getElementById('fact-modal'),
+      factId: document.getElementById('fact-id'),
+      factDescription: document.getElementById('fact-description'),
+      factCategory: document.getElementById('fact-category'),
+      factImage: document.getElementById('fact-image'),
       
       pickModal: document.getElementById('pick-modal'),
       pickId: document.getElementById('pick-id'),
       pickName: document.getElementById('pick-name'),
       pickImage: document.getElementById('pick-image'),
-      propertiesEditor: document.getElementById('properties-editor'),
+      factsEditor: document.getElementById('facts-editor'),
       
       importModal: document.getElementById('import-modal'),
       importData: document.getElementById('import-data')
@@ -34,69 +36,113 @@ class DatabaseEditor {
   }
 
   setupEventListeners() {
-    document.getElementById('add-category-button').addEventListener('click', () => this.addCategory());
+    document.getElementById('add-fact-button').addEventListener('click', () => this.addFact());
     document.getElementById('add-pick-button').addEventListener('click', () => this.addPick());
     document.getElementById('export-button').addEventListener('click', () => this.exportJSON());
     document.getElementById('export-sqlite-button').addEventListener('click', () => this.exportSQLite());
     document.getElementById('import-button').addEventListener('click', () => this.showImportModal());
     
-    document.getElementById('save-category-button').addEventListener('click', () => this.saveCategory());
-    document.getElementById('cancel-category-button').addEventListener('click', () => this.closeCategoryModal());
+    document.getElementById('save-fact-button').addEventListener('click', () => this.saveFact());
+    document.getElementById('cancel-fact-button').addEventListener('click', () => this.closeFactModal());
     
     document.getElementById('save-pick-button').addEventListener('click', () => this.savePick());
     document.getElementById('cancel-pick-button').addEventListener('click', () => this.closePickModal());
-    document.getElementById('add-property-button').addEventListener('click', () => this.addPropertyRow());
     
     document.getElementById('import-confirm-button').addEventListener('click', () => this.importData());
     document.getElementById('cancel-import-button').addEventListener('click', () => this.closeImportModal());
   }
 
-  // Category Management
-  addCategory() {
-    this.currentEditingCategory = null;
-    this.elements.categoryName.value = '';
-    this.elements.categoryImage.value = '';
-    this.elements.categoryModal.classList.add('active');
+  // Fact Management
+  addFact() {
+    this.currentEditingFactId = null;
+    this.elements.factId.value = this.generateFactId();
+    this.elements.factDescription.value = '';
+    this.elements.factCategory.value = '';
+    this.elements.factImage.value = '';
+    this.elements.factModal.classList.add('active');
   }
 
-  editCategory(name) {
-    this.currentEditingCategory = name;
-    const category = this.data.propertyCategories[name];
-    this.elements.categoryName.value = name;
-    this.elements.categoryImage.value = category.image || '';
-    this.elements.categoryModal.classList.add('active');
+  generateFactId() {
+    return 'fact_' + Date.now();
   }
 
-  deleteCategory(name) {
-    if (confirm(`Delete category "${name}"?`)) {
-      delete this.data.propertyCategories[name];
+  editFact(id) {
+    const fact = this.data.facts.find(f => f.id === id);
+    if (!fact) return;
+
+    this.currentEditingFactId = id;
+    this.elements.factId.value = fact.id;
+    this.elements.factDescription.value = fact.description;
+    this.elements.factCategory.value = fact.category;
+    this.elements.factImage.value = fact.image || '';
+    this.elements.factModal.classList.add('active');
+  }
+
+  deleteFact(id) {
+    const fact = this.data.facts.find(f => f.id === id);
+    if (fact && confirm(`Delete fact "${fact.description}"?`)) {
+      this.data.facts = this.data.facts.filter(f => f.id !== id);
+      this.data.picks.forEach(pick => {
+        if (pick.factIds) {
+          pick.factIds = pick.factIds.filter(fid => fid !== id);
+        }
+      });
       this.saveToLocalStorage();
       this.render();
     }
   }
 
-  saveCategory() {
-    const name = this.elements.categoryName.value.trim();
-    if (!name) {
-      alert('Category name is required!');
+  saveFact() {
+    const id = this.elements.factId.value.trim();
+    const description = this.elements.factDescription.value.trim();
+    const category = this.elements.factCategory.value.trim();
+    const image = this.elements.factImage.value.trim();
+
+    if (!id) {
+      alert('Fact ID is required!');
       return;
     }
 
-    if (this.currentEditingCategory && this.currentEditingCategory !== name) {
-      delete this.data.propertyCategories[this.currentEditingCategory];
+    if (!description) {
+      alert('Fact description is required!');
+      return;
     }
 
-    this.data.propertyCategories[name] = {
-      image: this.elements.categoryImage.value.trim() || null
+    if (!category) {
+      alert('Fact category is required!');
+      return;
+    }
+
+    const fact = {
+      id,
+      description,
+      category,
+      image: image || null
     };
 
+    if (this.currentEditingFactId) {
+      const index = this.data.facts.findIndex(f => f.id === this.currentEditingFactId);
+      if (index !== -1) {
+        this.data.facts[index] = fact;
+        if (this.currentEditingFactId !== id) {
+          this.data.picks.forEach(pick => {
+            if (pick.factIds) {
+              pick.factIds = pick.factIds.map(fid => fid === this.currentEditingFactId ? id : fid);
+            }
+          });
+        }
+      }
+    } else {
+      this.data.facts.push(fact);
+    }
+
     this.saveToLocalStorage();
-    this.closeCategoryModal();
+    this.closeFactModal();
     this.render();
   }
 
-  closeCategoryModal() {
-    this.elements.categoryModal.classList.remove('active');
+  closeFactModal() {
+    this.elements.factModal.classList.remove('active');
   }
 
   // Pick Management
@@ -105,8 +151,7 @@ class DatabaseEditor {
     this.elements.pickId.value = 'pick_' + Date.now();
     this.elements.pickName.value = '';
     this.elements.pickImage.value = '';
-    this.elements.propertiesEditor.innerHTML = '';
-    this.addPropertyRow();
+    this.renderFactsEditor([]);
     this.elements.pickModal.classList.add('active');
   }
 
@@ -118,16 +163,7 @@ class DatabaseEditor {
     this.elements.pickId.value = pick.id;
     this.elements.pickName.value = pick.name;
     this.elements.pickImage.value = pick.image || '';
-    
-    this.elements.propertiesEditor.innerHTML = '';
-    for (const [prop, value] of Object.entries(pick.properties)) {
-      this.addPropertyRow(prop, value, pick.propertyImages?.[prop] || '');
-    }
-    
-    if (Object.keys(pick.properties).length === 0) {
-      this.addPropertyRow();
-    }
-    
+    this.renderFactsEditor(pick.factIds || []);
     this.elements.pickModal.classList.add('active');
   }
 
@@ -150,34 +186,22 @@ class DatabaseEditor {
       return;
     }
 
-    const properties = {};
-    const propertyImages = {};
-    
-    const propertyRows = this.elements.propertiesEditor.querySelectorAll('.property-row');
-    propertyRows.forEach(row => {
-      const propName = row.querySelector('.property-name').value.trim();
-      const propValue = parseFloat(row.querySelector('.property-value').value);
-      const propImage = row.querySelector('.property-image').value.trim();
-      
-      if (propName && !isNaN(propValue)) {
-        properties[propName] = propValue;
-        if (propImage) {
-          propertyImages[propName] = propImage;
-        }
-      }
+    const factIds = [];
+    const checkboxes = this.elements.factsEditor.querySelectorAll('input[type="checkbox"]:checked');
+    checkboxes.forEach(cb => {
+      factIds.push(cb.value);
     });
 
-    if (Object.keys(properties).length === 0) {
-      alert('At least one property is required!');
+    if (factIds.length === 0) {
+      alert('At least one fact must be selected!');
       return;
     }
 
     const pick = {
       id,
       name,
-      properties,
-      image: image || null,
-      propertyImages: Object.keys(propertyImages).length > 0 ? propertyImages : {}
+      factIds,
+      image: image || null
     };
 
     if (this.currentEditingPick) {
@@ -198,21 +222,26 @@ class DatabaseEditor {
     this.elements.pickModal.classList.remove('active');
   }
 
-  addPropertyRow(name = '', value = '', image = '') {
-    const row = document.createElement('div');
-    row.className = 'property-row';
-    row.innerHTML = `
-      <input type="text" class="pixel-input property-name" placeholder="Property name" value="${name}">
-      <input type="number" class="pixel-input property-value" placeholder="Value" value="${value}">
-      <input type="text" class="pixel-input property-image" placeholder="Image URL" value="${image}">
-      <button class="delete-property-button" type="button">×</button>
-    `;
+  renderFactsEditor(selectedFactIds) {
+    this.elements.factsEditor.innerHTML = '';
     
-    row.querySelector('.delete-property-button').addEventListener('click', () => {
-      row.remove();
+    if (this.data.facts.length === 0) {
+      this.elements.factsEditor.innerHTML = '<div class="pixel-text">No facts available. Please create facts first.</div>';
+      return;
+    }
+
+    this.data.facts.forEach(fact => {
+      const checkbox = document.createElement('div');
+      checkbox.className = 'fact-checkbox-row';
+      const isChecked = selectedFactIds.includes(fact.id);
+      checkbox.innerHTML = `
+        <label class="pixel-text">
+          <input type="checkbox" value="${fact.id}" ${isChecked ? 'checked' : ''}>
+          <span class="fact-category">[${fact.category}]</span> ${fact.description}
+        </label>
+      `;
+      this.elements.factsEditor.appendChild(checkbox);
     });
-    
-    this.elements.propertiesEditor.appendChild(row);
   }
 
   // Import/Export
@@ -233,8 +262,12 @@ class DatabaseEditor {
         throw new Error('Invalid data format: "picks" array is required');
       }
       
+      if (!jsonData.facts || !Array.isArray(jsonData.facts)) {
+        throw new Error('Invalid data format: "facts" array is required');
+      }
+      
       this.data = {
-        propertyCategories: jsonData.propertyCategories || {},
+        facts: jsonData.facts,
         picks: jsonData.picks
       };
       
@@ -262,40 +295,42 @@ class DatabaseEditor {
     // Generate SQL script for SQLite
     let sql = '-- VERSUS Game Database\n\n';
     
+    sql += 'CREATE TABLE IF NOT EXISTS facts (\n';
+    sql += '  id TEXT PRIMARY KEY,\n';
+    sql += '  description TEXT NOT NULL,\n';
+    sql += '  category TEXT NOT NULL,\n';
+    sql += '  image TEXT\n';
+    sql += ');\n\n';
+    
     sql += 'CREATE TABLE IF NOT EXISTS picks (\n';
     sql += '  id TEXT PRIMARY KEY,\n';
     sql += '  name TEXT NOT NULL,\n';
     sql += '  image TEXT\n';
     sql += ');\n\n';
     
-    sql += 'CREATE TABLE IF NOT EXISTS properties (\n';
+    sql += 'CREATE TABLE IF NOT EXISTS pick_facts (\n';
     sql += '  pick_id TEXT NOT NULL,\n';
-    sql += '  property_name TEXT NOT NULL,\n';
-    sql += '  value REAL NOT NULL,\n';
-    sql += '  image TEXT,\n';
-    sql += '  FOREIGN KEY (pick_id) REFERENCES picks(id)\n';
+    sql += '  fact_id TEXT NOT NULL,\n';
+    sql += '  FOREIGN KEY (pick_id) REFERENCES picks(id),\n';
+    sql += '  FOREIGN KEY (fact_id) REFERENCES facts(id)\n';
     sql += ');\n\n';
     
-    sql += 'CREATE TABLE IF NOT EXISTS property_categories (\n';
-    sql += '  name TEXT PRIMARY KEY,\n';
-    sql += '  image TEXT\n';
-    sql += ');\n\n';
-    
-    // Insert categories
-    for (const [name, category] of Object.entries(this.data.propertyCategories)) {
-      const imageValue = category.image ? `'${category.image.replace(/'/g, "''")}'` : 'NULL';
-      sql += `INSERT INTO property_categories (name, image) VALUES ('${name.replace(/'/g, "''")}', ${imageValue});\n`;
+    // Insert facts
+    for (const fact of this.data.facts) {
+      const imageValue = fact.image ? `'${fact.image.replace(/'/g, "''")}'` : 'NULL';
+      sql += `INSERT INTO facts (id, description, category, image) VALUES ('${fact.id.replace(/'/g, "''")}', '${fact.description.replace(/'/g, "''")}', '${fact.category.replace(/'/g, "''")}', ${imageValue});\n`;
     }
     sql += '\n';
     
-    // Insert picks and properties
+    // Insert picks and pick_facts
     for (const pick of this.data.picks) {
       const imageValue = pick.image ? `'${pick.image.replace(/'/g, "''")}'` : 'NULL';
       sql += `INSERT INTO picks (id, name, image) VALUES ('${pick.id.replace(/'/g, "''")}', '${pick.name.replace(/'/g, "''")}', ${imageValue});\n`;
       
-      for (const [prop, value] of Object.entries(pick.properties)) {
-        const propImageValue = pick.propertyImages?.[prop] ? `'${pick.propertyImages[prop].replace(/'/g, "''")}'` : 'NULL';
-        sql += `INSERT INTO properties (pick_id, property_name, value, image) VALUES ('${pick.id.replace(/'/g, "''")}', '${prop.replace(/'/g, "''")}', ${value}, ${propImageValue});\n`;
+      if (pick.factIds) {
+        for (const factId of pick.factIds) {
+          sql += `INSERT INTO pick_facts (pick_id, fact_id) VALUES ('${pick.id.replace(/'/g, "''")}', '${factId.replace(/'/g, "''")}');\n`;
+        }
       }
       sql += '\n';
     }
@@ -327,25 +362,28 @@ class DatabaseEditor {
 
   // Rendering
   render() {
-    this.renderCategories();
+    this.renderFacts();
     this.renderPicks();
   }
 
-  renderCategories() {
-    this.elements.categoriesList.innerHTML = '';
+  renderFacts() {
+    this.elements.factsList.innerHTML = '';
     
-    for (const [name, category] of Object.entries(this.data.propertyCategories)) {
+    for (const fact of this.data.facts) {
       const card = document.createElement('div');
-      card.className = 'category-card';
+      card.className = 'fact-card';
       
-      let imagePreview = '<div class="category-image-preview">No image</div>';
-      if (category.image) {
-        imagePreview = `<div class="category-image-preview"><img src="${category.image}" alt="${name}"></div>`;
+      let imagePreview = '<div class="fact-image-preview">No image</div>';
+      if (fact.image) {
+        imagePreview = `<div class="fact-image-preview"><img src="${fact.image}" alt="${fact.description}"></div>`;
       }
       
       card.innerHTML = `
-        <div class="category-card-header">
-          <div class="category-name pixel-text">${name}</div>
+        <div class="fact-card-header">
+          <div class="fact-info">
+            <div class="fact-category pixel-text">[${fact.category}]</div>
+            <div class="fact-description pixel-text">${fact.description}</div>
+          </div>
           <div class="card-actions">
             <button class="icon-button edit-btn">✎</button>
             <button class="icon-button danger delete-btn">×</button>
@@ -354,10 +392,10 @@ class DatabaseEditor {
         ${imagePreview}
       `;
       
-      card.querySelector('.edit-btn').addEventListener('click', () => this.editCategory(name));
-      card.querySelector('.delete-btn').addEventListener('click', () => this.deleteCategory(name));
+      card.querySelector('.edit-btn').addEventListener('click', () => this.editFact(fact.id));
+      card.querySelector('.delete-btn').addEventListener('click', () => this.deleteFact(fact.id));
       
-      this.elements.categoriesList.appendChild(card);
+      this.elements.factsList.appendChild(card);
     }
   }
 
@@ -373,8 +411,12 @@ class DatabaseEditor {
         imagePreview = `<div class="pick-image-preview"><img src="${pick.image}" alt="${pick.name}"></div>`;
       }
       
-      const propertiesHTML = Object.entries(pick.properties)
-        .map(([prop, value]) => `<div class="property-item pixel-text">${prop}: ${value}</div>`)
+      const factsHTML = (pick.factIds || [])
+        .map(factId => {
+          const fact = this.data.facts.find(f => f.id === factId);
+          return fact ? `<div class="fact-item pixel-text">[${fact.category}] ${fact.description}</div>` : '';
+        })
+        .filter(html => html)
         .join('');
       
       card.innerHTML = `
@@ -388,8 +430,8 @@ class DatabaseEditor {
             <button class="icon-button danger delete-btn">×</button>
           </div>
         </div>
-        <div class="pick-properties">
-          ${propertiesHTML}
+        <div class="pick-facts">
+          ${factsHTML}
         </div>
       `;
       
