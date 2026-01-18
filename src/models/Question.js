@@ -3,34 +3,14 @@
  */
 class Question {
   /**
-   * @param {Pick} targetPick - The main pick to compare against
-   * @param {Pick[]} options - Array of picks to choose from
-   * @param {string} property - The property being compared
-   * @param {string} [propertyImage] - Optional image for the property category
+   * @param {Fact} fact - The fact being asked about
+   * @param {Pick[]} options - Array of picks to choose from (one has the fact)
+   * @param {number} correctAnswerIndex - Index of the correct option
    */
-  constructor(targetPick, options, property, propertyImage = null) {
-    this.targetPick = targetPick;
+  constructor(fact, options, correctAnswerIndex) {
+    this.fact = fact;
     this.options = options;
-    this.property = property;
-    this.propertyImage = propertyImage;
-    this.correctAnswer = this.findCorrectAnswer();
-  }
-
-  /**
-   * Find which option has more of the property than the target pick
-   * @returns {number} - Index of the correct option
-   */
-  findCorrectAnswer() {
-    const targetValue = this.targetPick.getPropertyValue(this.property);
-    
-    for (let i = 0; i < this.options.length; i++) {
-      const optionValue = this.options[i].getPropertyValue(this.property);
-      if (optionValue !== undefined && optionValue > targetValue) {
-        return i;
-      }
-    }
-    
-    return -1;
+    this.correctAnswer = correctAnswerIndex;
   }
 
   /**
@@ -47,7 +27,7 @@ class Question {
    * @returns {string}
    */
   getQuestionText() {
-    return `Which has more ${this.property} than ${this.targetPick.name}?`;
+    return `Who ${this.fact.description}?`;
   }
 }
 

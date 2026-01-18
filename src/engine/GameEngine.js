@@ -62,7 +62,8 @@ class GameEngine {
 
   /**
    * Generate the next question
-   * Uses slot machine retry behavior to ensure valid questions
+   * Picks a random fact and creates options with one correct pick (that has the fact)
+   * and other unrelated picks (that don't have the fact)
    * @returns {Question|null}
    */
   generateNextQuestion() {
@@ -73,83 +74,47 @@ class GameEngine {
     while (attempts < maxAttempts) {
       attempts++;
       
-      const targetPick = this.dataLoader.getRandomPick();
-      if (!targetPick) {
+      // Pick a random fact
+      const fact = this.dataLoader.getRandomFact();
+      if (!fact) {
         continue;
       }
 
-      const sharedPropertyPicks = this.dataLoader.findPicksWithSharedProperties(
-        targetPick,
-        this.options.optionsPerQuestion * 3 // Get more candidates
+      // Find picks that have this fact
+      const picksWithFact = this.dataLoader.findPicksWithFact(fact.id);
+      if (picksWithFact.length === 0) {
+        continue;
+      }
+
+      // Pick a random pick that has the fact (correct answer)
+      const correctPick = picksWithFact[Math.floor(Math.random() * picksWithFact.length)];
+
+      // Find picks that don't have this fact (incorrect options)
+      const wrongPicks = this.dataLoader.findPicksWithoutFact(
+        fact.id,
+        this.options.optionsPerQuestion - 1
       );
 
-      if (sharedPropertyPicks.length === 0) {
+      if (wrongPicks.length < this.options.optionsPerQuestion - 1) {
         continue;
       }
 
-      const commonProperties = this.findCommonProperties(targetPick, sharedPropertyPicks);
-      if (commonProperties.length === 0) {
-        continue;
-      }
-
-      const property = commonProperties[Math.floor(Math.random() * commonProperties.length)];
+      // Combine correct and wrong picks
+      const options = [correctPick, ...wrongPicks];
       
-      const validOptions = sharedPropertyPicks.filter(pick => {
-        const value = pick.getPropertyValue(property);
-        return value !== undefined && value > targetPick.getPropertyValue(property);
-      });
-
-      if (validOptions.length === 0) {
-        continue;
-      }
-
-      const selectedOption = validOptions[Math.floor(Math.random() * validOptions.length)];
-      
-      const otherOptions = this.dataLoader.findPicksWithSharedProperties(
-        targetPick,
-        this.options.optionsPerQuestion - 1
-      ).filter(p => {
-        // Ensure other options don't also have values greater than target
-        if (p.id === selectedOption.id) return false;
-        const value = p.getPropertyValue(property);
-        return value === undefined || value <= targetPick.getPropertyValue(property);
-      });
-
-      const options = [selectedOption, ...otherOptions].slice(0, this.options.optionsPerQuestion);
-      
-      if (options.length < this.options.optionsPerQuestion) {
-        continue;
-      }
-      
+      // Shuffle options
       this.shuffleArray(options);
+      
+      // Find the index of the correct answer
+      const correctAnswerIndex = options.findIndex(pick => pick.id === correctPick.id);
 
-      const propertyImage = this.dataLoader.getPropertyCategoryImage(property);
-      this.currentQuestion = new Question(targetPick, options, property, propertyImage);
+      this.currentQuestion = new Question(fact, options, correctAnswerIndex);
       
       return this.currentQuestion;
     }
     
     // If we couldn't find a question after max attempts, return null
     return null;
-  }
-
-  /**
-   * Find properties that are common between target pick and other picks
-   * @param {Pick} targetPick
-   * @param {Pick[]} otherPicks
-   * @returns {string[]}
-   */
-  findCommonProperties(targetPick, otherPicks) {
-    const targetProperties = targetPick.getPropertyNames();
-    const common = [];
-
-    for (const prop of targetProperties) {
-      if (otherPicks.some(pick => pick.hasProperty(prop))) {
-        common.push(prop);
-      }
-    }
-
-    return common;
   }
 
   /**

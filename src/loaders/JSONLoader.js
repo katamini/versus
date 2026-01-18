@@ -1,5 +1,6 @@
 const DataLoader = require('./DataLoader');
 const Pick = require('../models/Pick');
+const Fact = require('../models/Fact');
 
 /**
  * Loads game data from JSON (either local file or GitHub-hosted)
@@ -38,22 +39,30 @@ class JSONLoader extends DataLoader {
   }
 
   /**
-   * Parse JSON data into Pick objects
+   * Parse JSON data into Pick and Fact objects
    * @param {Object} data
    */
   parseData(data) {
-    if (data.propertyCategories) {
-      this.propertyCategories = data.propertyCategories;
+    // Load facts first
+    if (data.facts && Array.isArray(data.facts)) {
+      this.facts = data.facts.map(factData => {
+        return new Fact(
+          factData.id,
+          factData.description,
+          factData.category,
+          factData.image
+        );
+      });
     }
 
+    // Load picks
     if (data.picks && Array.isArray(data.picks)) {
       this.picks = data.picks.map(pickData => {
         return new Pick(
           pickData.id,
           pickData.name,
-          pickData.properties,
-          pickData.image,
-          pickData.propertyImages
+          pickData.factIds || [],
+          pickData.image
         );
       });
     }

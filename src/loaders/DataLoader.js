@@ -4,7 +4,7 @@
 class DataLoader {
   constructor() {
     this.picks = [];
-    this.propertyCategories = {};
+    this.facts = [];
   }
 
   /**
@@ -24,6 +24,14 @@ class DataLoader {
   }
 
   /**
+   * Get all facts
+   * @returns {Fact[]}
+   */
+  getFacts() {
+    return this.facts;
+  }
+
+  /**
    * Get a random pick
    * @returns {Pick|null}
    */
@@ -34,18 +42,32 @@ class DataLoader {
   }
 
   /**
-   * Find picks that share at least one property with the given pick
-   * @param {Pick} pick
+   * Get a random fact
+   * @returns {Fact|null}
+   */
+  getRandomFact() {
+    if (this.facts.length === 0) return null;
+    const index = Math.floor(Math.random() * this.facts.length);
+    return this.facts[index];
+  }
+
+  /**
+   * Find picks that have a specific fact
+   * @param {string} factId
+   * @returns {Pick[]}
+   */
+  findPicksWithFact(factId) {
+    return this.picks.filter(pick => pick.hasFact(factId));
+  }
+
+  /**
+   * Find picks that don't have a specific fact
+   * @param {string} factId
    * @param {number} count - Number of picks to return
    * @returns {Pick[]}
    */
-  findPicksWithSharedProperties(pick, count = 3) {
-    const propertyNames = pick.getPropertyNames();
-    const candidates = this.picks.filter(p => {
-      if (p.id === pick.id) return false;
-      return propertyNames.some(prop => p.hasProperty(prop));
-    });
-
+  findPicksWithoutFact(factId, count = 2) {
+    const candidates = this.picks.filter(pick => !pick.hasFact(factId));
     return this.getRandomSubset(candidates, count);
   }
 
@@ -61,12 +83,12 @@ class DataLoader {
   }
 
   /**
-   * Get image for a property category
-   * @param {string} propertyName
-   * @returns {string|null}
+   * Get fact by ID
+   * @param {string} factId
+   * @returns {Fact|null}
    */
-  getPropertyCategoryImage(propertyName) {
-    return this.propertyCategories[propertyName]?.image || null;
+  getFactById(factId) {
+    return this.facts.find(fact => fact.id === factId) || null;
   }
 }
 
