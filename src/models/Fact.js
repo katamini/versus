@@ -15,6 +15,16 @@ class Fact {
     this.category = category;
     this.image = image;
   }
+
+  /**
+   * Validate that required fields are not empty
+   * @returns {boolean}
+   */
+  isValid() {
+    return Boolean(this.id && this.id.trim() && 
+                   this.description && this.description.trim() && 
+                   this.category && this.category.trim());
+  }
 }
 
 module.exports = Fact;
