@@ -4,15 +4,15 @@
  */
 class Fact {
   /**
-   * @param {string} id - Unique identifier for the fact
    * @param {string} description - The fact description (e.g., "WON THE NOBEL PRIZE")
    * @param {string} category - Category/topic hint (e.g., "POLITICS", "FOOD")
+   * @param {number} [quantity] - Optional quantity for comparison (e.g., 10 dogs vs 5 dogs)
    * @param {string} [image] - Optional image URL for the fact
    */
-  constructor(id, description, category, image = null) {
-    this.id = id;
+  constructor(description, category, quantity = null, image = null) {
     this.description = description;
     this.category = category;
+    this.quantity = quantity;
     this.image = image;
   }
 
@@ -21,8 +21,7 @@ class Fact {
    * @returns {boolean}
    */
   isValid() {
-    return Boolean(this.id && this.id.trim() && 
-                   this.description && this.description.trim() && 
+    return Boolean(this.description && this.description.trim() && 
                    this.category && this.category.trim());
   }
 }

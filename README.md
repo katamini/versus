@@ -45,77 +45,58 @@ This will open the database editor at `http://localhost:8080/editor.html`.
 
 ### JSON Format
 
-The game uses JSON files with the following structure:
+The game uses a compact JSON format where each pick carries its own facts:
 
 ```json
 {
-  "facts": [
-    {
-      "id": "nobel_prize",
-      "description": "WON THE NOBEL PRIZE",
-      "category": "AWARDS",
-      "image": "https://example.com/nobel-icon.png"
-    },
-    {
-      "id": "hotdog_champion",
-      "description": "ATE THE MOST HOTDOGS",
-      "category": "FOOD",
-      "image": null
-    }
-  ],
   "picks": [
     {
       "id": "1",
       "name": "Alice",
-      "factIds": ["nobel_prize", "hotdog_champion"],
-      "image": "https://example.com/alice.png"
+      "description": "Famous Singer",
+      "image": "https://example.com/alice.png",
+      "facts": [
+        {
+          "description": "WON THE NOBEL PRIZE",
+          "category": "AWARDS",
+          "quantity": 1,
+          "image": null
+        },
+        {
+          "description": "HAS THE MOST DOGS",
+          "category": "ANIMALS",
+          "quantity": 10,
+          "image": null
+        }
+      ]
     }
   ]
 }
 ```
 
-### SQLite Format
+**Key features:**
+- **Compact structure**: Facts are embedded directly in each pick
+- **Optional quantity field**: When multiple picks share the same fact, the one with the highest quantity wins (e.g., if both Alice and Bob won Nobel Prizes, Alice with quantity=2 beats Bob with quantity=1)
+- **No fact IDs needed**: Facts are identified by their description
 
-For SQLite databases, use the following schema:
-
-```sql
-CREATE TABLE picks (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  image TEXT
-);
-
-CREATE TABLE facts (
-  id TEXT PRIMARY KEY,
-  description TEXT NOT NULL,
-  category TEXT NOT NULL,
-  image TEXT
-);
-
-CREATE TABLE pick_facts (
-  pick_id TEXT NOT NULL,
-  fact_id TEXT NOT NULL,
-  PRIMARY KEY (pick_id, fact_id),
-  FOREIGN KEY (pick_id) REFERENCES picks(id),
-  FOREIGN KEY (fact_id) REFERENCES facts(id)
-);
-```
+> **Note**: The SQLite loader is not currently updated for the compact format. Only the JSON format is supported with the new compact structure.
 
 ## Using the Database Editor
 
 The database editor (`/editor.html`) provides a visual interface to:
 
-1. **Add Facts** - Define facts with descriptions, categories, and optional images (e.g., "WON THE NOBEL PRIZE" in category "AWARDS")
-2. **Add Picks** - Create characters/entries and assign facts to them using checkboxes
+1. **Add Picks** - Create characters/entries with embedded facts
+2. **Add Facts to Picks** - Define facts with descriptions, categories, optional quantities, and images
 3. **Add Images** - Optionally add pixel art images for picks and facts
 4. **Import Data** - Load existing JSON data
 5. **Export JSON** - Download your database as a JSON file
-6. **Export SQLite** - Download SQL script to create a SQLite database
 
 ### Editor Features
 
 - **Visual editing** - Click-based interface, no code required
-- **Live preview** - See your facts and picks as cards with their associated facts
+- **Inline fact editing** - Add and edit facts directly within each pick
+- **Quantity support** - Specify quantities for facts to determine the "winner" when multiple picks share a fact
+- **Live preview** - See your picks as cards with their associated facts
 - **Local storage** - Automatically saves your work in the browser
 - **Bulk import** - Paste JSON data to quickly populate the database
 

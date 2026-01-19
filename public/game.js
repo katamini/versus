@@ -2,33 +2,39 @@
 // Import classes (in a real setup, you'd use a bundler like webpack or use ES modules)
 
 class Fact {
-  constructor(id, description, category, image = null) {
-    this.id = id;
+  constructor(description, category, quantity = null, image = null) {
     this.description = description;
     this.category = category;
+    this.quantity = quantity;
     this.image = image;
   }
 }
 
 class Pick {
-  constructor(id, name, factIds = [], image = null) {
+  constructor(id, name, facts = [], image = null, description = null) {
     this.id = id;
     this.name = name;
-    this.factIds = factIds;
+    this.facts = facts;
     this.image = image;
+    this.description = description;
   }
 
-  getFactIds() {
-    return this.factIds;
+  getFacts() {
+    return this.facts;
   }
 
-  hasFact(factId) {
-    return this.factIds.includes(factId);
+  hasFact(factDescription) {
+    return this.facts.some(fact => fact.description === factDescription);
   }
 
-  addFact(factId) {
-    if (!this.factIds.includes(factId)) {
-      this.factIds.push(factId);
+  getFactQuantity(factDescription) {
+    const fact = this.facts.find(f => f.description === factDescription);
+    return fact ? (fact.quantity || 1) : 0;
+  }
+
+  addFact(fact) {
+    if (!this.hasFact(fact.description)) {
+      this.facts.push(fact);
     }
   }
 }
@@ -79,12 +85,12 @@ class DataLoader {
     return this.facts[index];
   }
 
-  findPicksWithFact(factId) {
-    return this.picks.filter(pick => pick.hasFact(factId));
+  findPicksWithFact(factDescription) {
+    return this.picks.filter(pick => pick.hasFact(factDescription));
   }
 
-  findPicksWithoutFact(factId, count = 2) {
-    const candidates = this.picks.filter(pick => !pick.hasFact(factId));
+  findPicksWithoutFact(factDescription, count = 2) {
+    const candidates = this.picks.filter(pick => !pick.hasFact(factDescription));
     return this.getRandomSubset(candidates, count);
   }
 
@@ -93,8 +99,8 @@ class DataLoader {
     return shuffled.slice(0, Math.min(count, shuffled.length));
   }
 
-  getFactById(factId) {
-    return this.facts.find(fact => fact.id === factId) || null;
+  getFactByDescription(factDescription) {
+    return this.facts.find(fact => fact.description === factDescription) || null;
   }
 }
 
@@ -118,29 +124,50 @@ class JSONLoader extends DataLoader {
   }
 
   parseData(data) {
-    // Load facts first
-    if (data.facts && Array.isArray(data.facts)) {
-      this.facts = data.facts.map(factData => {
-        return new Fact(
-          factData.id,
-          factData.description,
-          factData.category,
-          factData.image
+    // Load picks with embedded facts
+    if (data.picks && Array.isArray(data.picks)) {
+      this.picks = data.picks.map(pickData => {
+        // Parse facts for this pick
+        const facts = (pickData.facts || []).map(factData => {
+          return new Fact(
+            factData.description,
+            factData.category,
+            factData.quantity,
+            factData.image
+          );
+        });
+
+        return new Pick(
+          pickData.id,
+          pickData.name,
+          facts,
+          pickData.image,
+          pickData.description
         );
       });
     }
 
-    // Load picks
-    if (data.picks && Array.isArray(data.picks)) {
-      this.picks = data.picks.map(pickData => {
-        return new Pick(
-          pickData.id,
-          pickData.name,
-          pickData.factIds || [],
-          pickData.image
-        );
-      });
+    // Build global facts list from all picks
+    // Keep the fact with the highest quantity when duplicates exist
+    const factMap = new Map();
+    for (const pick of this.picks) {
+      for (const fact of pick.getFacts()) {
+        const key = fact.description;
+        const existingFact = factMap.get(key);
+        
+        if (!existingFact) {
+          factMap.set(key, fact);
+        } else {
+          // Keep the fact with the higher quantity
+          const existingQty = existingFact.quantity || 0;
+          const newQty = fact.quantity || 0;
+          if (newQty > existingQty) {
+            factMap.set(key, fact);
+          }
+        }
+      }
     }
+    this.facts = Array.from(factMap.values());
   }
 }
 
@@ -205,17 +232,31 @@ class GameEngine {
       }
 
       // Find picks that have this fact
-      const picksWithFact = this.dataLoader.findPicksWithFact(fact.id);
+      const picksWithFact = this.dataLoader.findPicksWithFact(fact.description);
       if (picksWithFact.length === 0) {
         continue;
       }
 
-      // Pick a random pick that has the fact (correct answer)
-      const correctPick = picksWithFact[Math.floor(Math.random() * picksWithFact.length)];
+      // Find the pick(s) with the highest quantity for this fact
+      let maxQuantity = 0;
+      let tiedPicks = [];
+      
+      for (const pick of picksWithFact) {
+        const quantity = pick.getFactQuantity(fact.description);
+        if (quantity > maxQuantity) {
+          maxQuantity = quantity;
+          tiedPicks = [pick];
+        } else if (quantity === maxQuantity) {
+          tiedPicks.push(pick);
+        }
+      }
+      
+      // Randomly select among tied picks
+      const correctPick = tiedPicks[Math.floor(Math.random() * tiedPicks.length)];
 
       // Find picks that don't have this fact (incorrect options)
       const wrongPicks = this.dataLoader.findPicksWithoutFact(
-        fact.id,
+        fact.description,
         this.options.optionsPerQuestion - 1
       );
 
@@ -290,7 +331,7 @@ class GameEngine {
 
   getBestStreak() {
     const saved = localStorage.getItem('bestStreak');
-    const best = saved ? parseInt(saved) : 0;
+    const best = saved ? parseInt(saved, 10) : 0;
     if (this.score > best) {
       localStorage.setItem('bestStreak', this.score.toString());
       return this.score;

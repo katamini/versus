@@ -1,102 +1,154 @@
 {
-  "facts": [
-    {
-      "id": "nobel_prize",
-      "description": "WON THE NOBEL PRIZE",
-      "category": "AWARDS",
-      "image": null
-    },
-    {
-      "id": "hotdog_champion",
-      "description": "ATE THE MOST HOTDOGS",
-      "category": "FOOD",
-      "image": null
-    },
-    {
-      "id": "tallest_person",
-      "description": "IS THE TALLEST PERSON",
-      "category": "PHYSICAL",
-      "image": null
-    },
-    {
-      "id": "fastest_runner",
-      "description": "IS THE FASTEST RUNNER",
-      "category": "SPORTS",
-      "image": null
-    },
-    {
-      "id": "richest_person",
-      "description": "IS THE RICHEST PERSON",
-      "category": "MONEY",
-      "image": null
-    },
-    {
-      "id": "most_pets",
-      "description": "HAS THE MOST PETS",
-      "category": "ANIMALS",
-      "image": null
-    },
-    {
-      "id": "youngest",
-      "description": "IS THE YOUNGEST",
-      "category": "AGE",
-      "image": null
-    },
-    {
-      "id": "biggest_library",
-      "description": "HAS THE BIGGEST LIBRARY",
-      "category": "BOOKS",
-      "image": null
-    }
-  ],
   "picks": [
     {
       "id": "1",
       "name": "Alice",
-      "factIds": ["nobel_prize", "biggest_library"],
-      "image": null
+      "description": "Famous Singer",
+      "image": null,
+      "facts": [
+        {
+          "description": "WON THE NOBEL PRIZE",
+          "category": "AWARDS",
+          "quantity": 1,
+          "image": null
+        },
+        {
+          "description": "HAS THE BIGGEST LIBRARY",
+          "category": "BOOKS",
+          "image": null
+        }
+      ]
     },
     {
       "id": "2",
       "name": "Bob",
-      "factIds": ["richest_person", "tallest_person"],
-      "image": null
+      "description": "Rich Businessman",
+      "image": null,
+      "facts": [
+        {
+          "description": "IS THE RICHEST PERSON",
+          "category": "MONEY",
+          "image": null
+        },
+        {
+          "description": "IS THE TALLEST PERSON",
+          "category": "PHYSICAL",
+          "image": null
+        }
+      ]
     },
     {
       "id": "3",
       "name": "Charlie",
-      "factIds": ["hotdog_champion", "youngest"],
-      "image": null
+      "description": "Food Champion",
+      "image": null,
+      "facts": [
+        {
+          "description": "ATE THE MOST HOTDOGS",
+          "category": "FOOD",
+          "quantity": 75,
+          "image": null
+        },
+        {
+          "description": "IS THE YOUNGEST",
+          "category": "AGE",
+          "image": null
+        }
+      ]
     },
     {
       "id": "4",
       "name": "Diana",
-      "factIds": ["most_pets", "fastest_runner"],
-      "image": null
+      "description": "Animal Lover",
+      "image": null,
+      "facts": [
+        {
+          "description": "HAS THE MOST PETS",
+          "category": "ANIMALS",
+          "quantity": 15,
+          "image": null
+        },
+        {
+          "description": "IS THE FASTEST RUNNER",
+          "category": "SPORTS",
+          "image": null
+        }
+      ]
     },
     {
       "id": "5",
       "name": "Eve",
-      "factIds": ["fastest_runner", "richest_person"],
-      "image": null
+      "description": "Athlete",
+      "image": null,
+      "facts": [
+        {
+          "description": "IS THE FASTEST RUNNER",
+          "category": "SPORTS",
+          "image": null
+        },
+        {
+          "description": "IS THE RICHEST PERSON",
+          "category": "MONEY",
+          "image": null
+        }
+      ]
     },
     {
       "id": "6",
       "name": "Frank",
-      "factIds": ["most_pets", "hotdog_champion"],
-      "image": null
+      "description": "Animal Enthusiast",
+      "image": null,
+      "facts": [
+        {
+          "description": "HAS THE MOST PETS",
+          "category": "ANIMALS",
+          "quantity": 10,
+          "image": null
+        },
+        {
+          "description": "ATE THE MOST HOTDOGS",
+          "category": "FOOD",
+          "quantity": 50,
+          "image": null
+        }
+      ]
     },
     {
       "id": "7",
       "name": "Grace",
-      "factIds": ["biggest_library", "tallest_person"],
-      "image": null
+      "description": "Scholar",
+      "image": null,
+      "facts": [
+        {
+          "description": "HAS THE BIGGEST LIBRARY",
+          "category": "BOOKS",
+          "image": null
+        },
+        {
+          "description": "IS THE TALLEST PERSON",
+          "category": "PHYSICAL",
+          "image": null
+        }
+      ]
     },
     {
       "id": "8",
       "name": "Henry",
-      "factIds": ["nobel_prize", "youngest"],
-      "image": null
+      "description": "Scientist",
+      "image": null,
+      "facts": [
+        {
+          "description": "WON THE NOBEL PRIZE",
+          "category": "AWARDS",
+          "quantity": 2,
+          "image": null
+        },
+        {
+          "description": "IS THE YOUNGEST",
+          "category": "AGE",
+          "image": null
+        }
+      ]
     }
   ]
 }
