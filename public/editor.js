@@ -94,10 +94,19 @@ class DatabaseEditor {
       const img = row.querySelector('.fact-img').value.trim();
       
       if (desc && cat) {
+        // Parse and validate quantity
+        let quantity = null;
+        if (qty) {
+          const parsedQty = parseInt(qty, 10);
+          if (!isNaN(parsedQty) && parsedQty > 0) {
+            quantity = parsedQty;
+          }
+        }
+        
         facts.push({
           description: desc,
           category: cat,
-          quantity: qty ? parseInt(qty, 10) : null,
+          quantity: quantity,
           image: img || null
         });
       }

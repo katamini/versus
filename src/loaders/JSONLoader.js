@@ -67,12 +67,22 @@ class JSONLoader extends DataLoader {
     }
 
     // Build global facts list from all picks
+    // Keep the fact with the highest quantity when duplicates exist
     const factMap = new Map();
     for (const pick of this.picks) {
       for (const fact of pick.getFacts()) {
         const key = fact.description;
-        if (!factMap.has(key)) {
+        const existingFact = factMap.get(key);
+        
+        if (!existingFact) {
           factMap.set(key, fact);
+        } else {
+          // Keep the fact with the higher quantity
+          const existingQty = existingFact.quantity || 0;
+          const newQty = fact.quantity || 0;
+          if (newQty > existingQty) {
+            factMap.set(key, fact);
+          }
         }
       }
     }
