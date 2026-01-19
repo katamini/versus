@@ -321,7 +321,7 @@ class GameEngine {
 
   getBestStreak() {
     const saved = localStorage.getItem('bestStreak');
-    const best = saved ? parseInt(saved) : 0;
+    const best = saved ? parseInt(saved, 10) : 0;
     if (this.score > best) {
       localStorage.setItem('bestStreak', this.score.toString());
       return this.score;
