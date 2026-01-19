@@ -53,21 +53,21 @@ class DataLoader {
 
   /**
    * Find picks that have a specific fact
-   * @param {string} factId
+   * @param {string} factDescription
    * @returns {Pick[]}
    */
-  findPicksWithFact(factId) {
-    return this.picks.filter(pick => pick.hasFact(factId));
+  findPicksWithFact(factDescription) {
+    return this.picks.filter(pick => pick.hasFact(factDescription));
   }
 
   /**
    * Find picks that don't have a specific fact
-   * @param {string} factId
+   * @param {string} factDescription
    * @param {number} count - Number of picks to return
    * @returns {Pick[]}
    */
-  findPicksWithoutFact(factId, count = 2) {
-    const candidates = this.picks.filter(pick => !pick.hasFact(factId));
+  findPicksWithoutFact(factDescription, count = 2) {
+    const candidates = this.picks.filter(pick => !pick.hasFact(factDescription));
     return this.getRandomSubset(candidates, count);
   }
 
@@ -83,12 +83,12 @@ class DataLoader {
   }
 
   /**
-   * Get fact by ID
-   * @param {string} factId
+   * Get fact by description
+   * @param {string} factDescription
    * @returns {Fact|null}
    */
-  getFactById(factId) {
-    return this.facts.find(fact => fact.id === factId) || null;
+  getFactByDescription(factDescription) {
+    return this.facts.find(fact => fact.description === factDescription) || null;
   }
 }
 

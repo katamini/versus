@@ -43,29 +43,40 @@ class JSONLoader extends DataLoader {
    * @param {Object} data
    */
   parseData(data) {
-    // Load facts first
-    if (data.facts && Array.isArray(data.facts)) {
-      this.facts = data.facts.map(factData => {
-        return new Fact(
-          factData.id,
-          factData.description,
-          factData.category,
-          factData.image
+    // Load picks with embedded facts
+    if (data.picks && Array.isArray(data.picks)) {
+      this.picks = data.picks.map(pickData => {
+        // Parse facts for this pick
+        const facts = (pickData.facts || []).map(factData => {
+          return new Fact(
+            factData.description,
+            factData.category,
+            factData.quantity,
+            factData.image
+          );
+        });
+
+        return new Pick(
+          pickData.id,
+          pickData.name,
+          facts,
+          pickData.image,
+          pickData.description
         );
       });
     }
 
-    // Load picks
-    if (data.picks && Array.isArray(data.picks)) {
-      this.picks = data.picks.map(pickData => {
-        return new Pick(
-          pickData.id,
-          pickData.name,
-          pickData.factIds || [],
-          pickData.image
-        );
-      });
+    // Build global facts list from all picks
+    const factMap = new Map();
+    for (const pick of this.picks) {
+      for (const fact of pick.getFacts()) {
+        const key = fact.description;
+        if (!factMap.has(key)) {
+          factMap.set(key, fact);
+        }
+      }
     }
+    this.facts = Array.from(factMap.values());
   }
 }
 

@@ -64,6 +64,7 @@ class GameEngine {
    * Generate the next question
    * Picks a random fact and creates options with one correct pick (that has the fact)
    * and other unrelated picks (that don't have the fact)
+   * When multiple picks have the same fact, the one with the highest quantity wins
    * @returns {Question|null}
    */
   generateNextQuestion() {
@@ -81,17 +82,26 @@ class GameEngine {
       }
 
       // Find picks that have this fact
-      const picksWithFact = this.dataLoader.findPicksWithFact(fact.id);
+      const picksWithFact = this.dataLoader.findPicksWithFact(fact.description);
       if (picksWithFact.length === 0) {
         continue;
       }
 
-      // Pick a random pick that has the fact (correct answer)
-      const correctPick = picksWithFact[Math.floor(Math.random() * picksWithFact.length)];
+      // Find the pick with the highest quantity for this fact
+      let correctPick = picksWithFact[0];
+      let maxQuantity = correctPick.getFactQuantity(fact.description);
+      
+      for (let i = 1; i < picksWithFact.length; i++) {
+        const quantity = picksWithFact[i].getFactQuantity(fact.description);
+        if (quantity > maxQuantity) {
+          maxQuantity = quantity;
+          correctPick = picksWithFact[i];
+        }
+      }
 
       // Find picks that don't have this fact (incorrect options)
       const wrongPicks = this.dataLoader.findPicksWithoutFact(
-        fact.id,
+        fact.description,
         this.options.optionsPerQuestion - 1
       );
 
