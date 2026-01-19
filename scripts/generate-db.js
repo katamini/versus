@@ -19,37 +19,40 @@ function generateSQLiteScript(jsonData, outputPath) {
   sql += '  image TEXT\n';
   sql += ');\n\n';
   
-  sql += 'CREATE TABLE IF NOT EXISTS properties (\n';
-  sql += '  pick_id TEXT NOT NULL,\n';
-  sql += '  property_name TEXT NOT NULL,\n';
-  sql += '  value REAL NOT NULL,\n';
-  sql += '  image TEXT,\n';
-  sql += '  FOREIGN KEY (pick_id) REFERENCES picks(id)\n';
-  sql += ');\n\n';
-  
-  sql += 'CREATE TABLE IF NOT EXISTS property_categories (\n';
-  sql += '  name TEXT PRIMARY KEY,\n';
+  sql += 'CREATE TABLE IF NOT EXISTS facts (\n';
+  sql += '  id TEXT PRIMARY KEY,\n';
+  sql += '  description TEXT NOT NULL,\n';
+  sql += '  category TEXT NOT NULL,\n';
   sql += '  image TEXT\n';
   sql += ');\n\n';
   
-  // Insert categories
-  if (jsonData.propertyCategories) {
-    for (const [name, category] of Object.entries(jsonData.propertyCategories)) {
-      const imageValue = category.image ? `'${category.image.replace(/'/g, "''")}'` : 'NULL';
-      sql += `INSERT INTO property_categories (name, image) VALUES ('${name.replace(/'/g, "''")}', ${imageValue});\n`;
+  sql += 'CREATE TABLE IF NOT EXISTS pick_facts (\n';
+  sql += '  pick_id TEXT NOT NULL,\n';
+  sql += '  fact_id TEXT NOT NULL,\n';
+  sql += '  PRIMARY KEY (pick_id, fact_id),\n';
+  sql += '  FOREIGN KEY (pick_id) REFERENCES picks(id),\n';
+  sql += '  FOREIGN KEY (fact_id) REFERENCES facts(id)\n';
+  sql += ');\n\n';
+  
+  // Insert facts
+  if (jsonData.facts) {
+    for (const fact of jsonData.facts) {
+      const imageValue = fact.image ? `'${fact.image.replace(/'/g, "''")}'` : 'NULL';
+      sql += `INSERT INTO facts (id, description, category, image) VALUES ('${fact.id.replace(/'/g, "''")}', '${fact.description.replace(/'/g, "''")}', '${fact.category.replace(/'/g, "''")}', ${imageValue});\n`;
     }
     sql += '\n';
   }
   
-  // Insert picks and properties
+  // Insert picks and pick_facts
   if (jsonData.picks) {
     for (const pick of jsonData.picks) {
       const imageValue = pick.image ? `'${pick.image.replace(/'/g, "''")}'` : 'NULL';
       sql += `INSERT INTO picks (id, name, image) VALUES ('${pick.id.replace(/'/g, "''")}', '${pick.name.replace(/'/g, "''")}', ${imageValue});\n`;
       
-      for (const [prop, value] of Object.entries(pick.properties)) {
-        const propImageValue = pick.propertyImages?.[prop] ? `'${pick.propertyImages[prop].replace(/'/g, "''")}'` : 'NULL';
-        sql += `INSERT INTO properties (pick_id, property_name, value, image) VALUES ('${pick.id.replace(/'/g, "''")}', '${prop.replace(/'/g, "''")}', ${value}, ${propImageValue});\n`;
+      if (pick.factIds && Array.isArray(pick.factIds)) {
+        for (const factId of pick.factIds) {
+          sql += `INSERT INTO pick_facts (pick_id, fact_id) VALUES ('${pick.id.replace(/'/g, "''")}', '${factId.replace(/'/g, "''")}');\n`;
+        }
       }
       sql += '\n';
     }
@@ -98,12 +101,12 @@ function main() {
       
       console.log(`  - Found ${jsonData.picks.length} picks`);
       
-      // Count properties
-      const allProperties = new Set();
-      for (const pick of jsonData.picks) {
-        Object.keys(pick.properties || {}).forEach(prop => allProperties.add(prop));
+      // Count facts
+      const allFacts = new Set();
+      if (jsonData.facts && Array.isArray(jsonData.facts)) {
+        jsonData.facts.forEach(fact => allFacts.add(fact.id));
       }
-      console.log(`  - Found ${allProperties.size} unique properties`);
+      console.log(`  - Found ${allFacts.size} facts`);
       
       // Generate SQL script
       generateSQLiteScript(jsonData, sqlPath);

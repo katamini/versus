@@ -1,56 +1,46 @@
 /**
  * Represents a single pick/entry in the game database
- * Each pick has properties with numeric values and optional images
+ * Each pick has associated facts
  */
 class Pick {
   /**
    * @param {string} id - Unique identifier for the pick
    * @param {string} name - Display name of the pick
-   * @param {Object<string, number>} properties - Properties with numeric values (e.g., {DOGS: 10, MONEY: 5})
-   * @param {string} [image] - Optional image URL for the pick
-   * @param {Object<string, string>} [propertyImages] - Optional images for specific properties
+   * @param {string[]} factIds - Array of fact IDs associated with this pick
+   * @param {string} [image] - Optional image URL for the pick (pixel art)
    */
-  constructor(id, name, properties, image = null, propertyImages = {}) {
+  constructor(id, name, factIds = [], image = null) {
     this.id = id;
     this.name = name;
-    this.properties = properties;
+    this.factIds = factIds;
     this.image = image;
-    this.propertyImages = propertyImages;
   }
 
   /**
-   * Get all property names for this pick
+   * Get all fact IDs for this pick
    * @returns {string[]}
    */
-  getPropertyNames() {
-    return Object.keys(this.properties);
+  getFactIds() {
+    return this.factIds;
   }
 
   /**
-   * Get the value of a specific property
-   * @param {string} propertyName
-   * @returns {number|undefined}
-   */
-  getPropertyValue(propertyName) {
-    return this.properties[propertyName];
-  }
-
-  /**
-   * Check if this pick has a specific property
-   * @param {string} propertyName
+   * Check if this pick has a specific fact
+   * @param {string} factId
    * @returns {boolean}
    */
-  hasProperty(propertyName) {
-    return propertyName in this.properties;
+  hasFact(factId) {
+    return this.factIds.includes(factId);
   }
 
   /**
-   * Get image for a specific property
-   * @param {string} propertyName
-   * @returns {string|null}
+   * Add a fact to this pick
+   * @param {string} factId
    */
-  getPropertyImage(propertyName) {
-    return this.propertyImages[propertyName] || null;
+  addFact(factId) {
+    if (!this.factIds.includes(factId)) {
+      this.factIds.push(factId);
+    }
   }
 }
 

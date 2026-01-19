@@ -1,14 +1,14 @@
 # VERSUS - Pixel Quiz Game Engine
 
-A colorful pixel-art quiz game engine for building browser-based guess games. Players compare properties between characters/picks and try to reach the maximum number of consecutive successful guesses!
+A colorful pixel-art quiz game engine for building browser-based fact-matching games. Players match facts to characters/picks and try to reach the maximum number of consecutive successful guesses!
 
 ## Features
 
 - 🎮 **Browser-based game engine** - No installation required, runs in any modern browser
 - 🎨 **Pixel-art aesthetic** - Colorful retro-style UI with pixel fonts and vibrant gradients
-- 📊 **Property comparison gameplay** - Compare numeric properties between different picks
+- 🎯 **Fact-matching gameplay** - Match interesting facts to characters/items
 - 🔄 **Flexible data loading** - Support for both GitHub-hosted JSON files and SQLite databases
-- 🖼️ **Image support** - Optional images for picks and property categories
+- 🖼️ **Image support** - Optional pixel art images for picks and facts
 - ✏️ **Built-in database editor** - Easy-to-use browser-based tool for creating and editing game data
 - 🏆 **Streak-based scoring** - Players aim for the maximum consecutive correct guesses
 - 📱 **Responsive design** - Works on desktop and mobile devices
@@ -34,11 +34,11 @@ This will open the database editor at `http://localhost:8080/editor.html`.
 
 ## How to Play
 
-1. The game shows you a target pick (character/entry) with various properties
-2. You're asked: "Which has more [PROPERTY] than [TARGET]?"
-3. Choose from multiple options
+1. The game presents a fact with a category hint (e.g., "AWARDS", "FOOD")
+2. You're asked: "Who [FACT]?" (e.g., "Who WON THE NOBEL PRIZE?")
+3. Choose from multiple character options
 4. If you guess correctly, your streak continues
-5. If you guess wrong, the game ends
+5. If you guess wrong or run out of time, the game ends
 6. Try to achieve the maximum consecutive correct guesses!
 
 ## Game Data Format
@@ -49,27 +49,26 @@ The game uses JSON files with the following structure:
 
 ```json
 {
-  "propertyCategories": {
-    "DOGS": {
-      "image": "https://example.com/dog-icon.png"
+  "facts": [
+    {
+      "id": "nobel_prize",
+      "description": "WON THE NOBEL PRIZE",
+      "category": "AWARDS",
+      "image": "https://example.com/nobel-icon.png"
     },
-    "MONEY": {
+    {
+      "id": "hotdog_champion",
+      "description": "ATE THE MOST HOTDOGS",
+      "category": "FOOD",
       "image": null
     }
-  },
+  ],
   "picks": [
     {
       "id": "1",
       "name": "Alice",
-      "properties": {
-        "DOGS": 10,
-        "MONEY": 5,
-        "EYES": 2
-      },
-      "image": "https://example.com/alice.png",
-      "propertyImages": {
-        "DOGS": "https://example.com/alice-dogs.png"
-      }
+      "factIds": ["nobel_prize", "hotdog_champion"],
+      "image": "https://example.com/alice.png"
     }
   ]
 }
@@ -86,17 +85,19 @@ CREATE TABLE picks (
   image TEXT
 );
 
-CREATE TABLE properties (
-  pick_id TEXT NOT NULL,
-  property_name TEXT NOT NULL,
-  value REAL NOT NULL,
-  image TEXT,
-  FOREIGN KEY (pick_id) REFERENCES picks(id)
+CREATE TABLE facts (
+  id TEXT PRIMARY KEY,
+  description TEXT NOT NULL,
+  category TEXT NOT NULL,
+  image TEXT
 );
 
-CREATE TABLE property_categories (
-  name TEXT PRIMARY KEY,
-  image TEXT
+CREATE TABLE pick_facts (
+  pick_id TEXT NOT NULL,
+  fact_id TEXT NOT NULL,
+  PRIMARY KEY (pick_id, fact_id),
+  FOREIGN KEY (pick_id) REFERENCES picks(id),
+  FOREIGN KEY (fact_id) REFERENCES facts(id)
 );
 ```
 
@@ -104,9 +105,9 @@ CREATE TABLE property_categories (
 
 The database editor (`/editor.html`) provides a visual interface to:
 
-1. **Add Property Categories** - Define the types of properties (e.g., DOGS, MONEY, HEIGHT)
-2. **Add Picks** - Create characters/entries with multiple properties
-3. **Add Images** - Optionally add images for picks and properties
+1. **Add Facts** - Define facts with descriptions, categories, and optional images (e.g., "WON THE NOBEL PRIZE" in category "AWARDS")
+2. **Add Picks** - Create characters/entries and assign facts to them using checkboxes
+3. **Add Images** - Optionally add pixel art images for picks and facts
 4. **Import Data** - Load existing JSON data
 5. **Export JSON** - Download your database as a JSON file
 6. **Export SQLite** - Download SQL script to create a SQLite database
@@ -114,7 +115,7 @@ The database editor (`/editor.html`) provides a visual interface to:
 ### Editor Features
 
 - **Visual editing** - Click-based interface, no code required
-- **Live preview** - See your picks and categories as cards
+- **Live preview** - See your facts and picks as cards with their associated facts
 - **Local storage** - Automatically saves your work in the browser
 - **Bulk import** - Paste JSON data to quickly populate the database
 
@@ -161,11 +162,14 @@ versus/
 
 ## Core Classes
 
+### Fact
+Represents a fact that can be associated with picks (e.g., "WON THE NOBEL PRIZE", category: "AWARDS").
+
 ### Pick
-Represents a single entry in the game with properties and optional images.
+Represents a single character/item in the game with associated facts and optional pixel art image.
 
 ### Question
-Represents a game question with a target pick, options, and the property being compared.
+Represents a game question with a fact, options (picks), and the correct answer.
 
 ### DataLoader
 Base class for loading game data from various sources.

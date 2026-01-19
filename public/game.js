@@ -1,52 +1,43 @@
 // Browser-compatible version of the game engine
 // Import classes (in a real setup, you'd use a bundler like webpack or use ES modules)
 
+class Fact {
+  constructor(id, description, category, image = null) {
+    this.id = id;
+    this.description = description;
+    this.category = category;
+    this.image = image;
+  }
+}
+
 class Pick {
-  constructor(id, name, properties, image = null, propertyImages = {}) {
+  constructor(id, name, factIds = [], image = null) {
     this.id = id;
     this.name = name;
-    this.properties = properties;
+    this.factIds = factIds;
     this.image = image;
-    this.propertyImages = propertyImages;
   }
 
-  getPropertyNames() {
-    return Object.keys(this.properties);
+  getFactIds() {
+    return this.factIds;
   }
 
-  getPropertyValue(propertyName) {
-    return this.properties[propertyName];
+  hasFact(factId) {
+    return this.factIds.includes(factId);
   }
 
-  hasProperty(propertyName) {
-    return propertyName in this.properties;
-  }
-
-  getPropertyImage(propertyName) {
-    return this.propertyImages[propertyName] || null;
+  addFact(factId) {
+    if (!this.factIds.includes(factId)) {
+      this.factIds.push(factId);
+    }
   }
 }
 
 class Question {
-  constructor(targetPick, options, property, propertyImage = null) {
-    this.targetPick = targetPick;
+  constructor(fact, options, correctAnswerIndex) {
+    this.fact = fact;
     this.options = options;
-    this.property = property;
-    this.propertyImage = propertyImage;
-    this.correctAnswer = this.findCorrectAnswer();
-  }
-
-  findCorrectAnswer() {
-    const targetValue = this.targetPick.getPropertyValue(this.property);
-    
-    for (let i = 0; i < this.options.length; i++) {
-      const optionValue = this.options[i].getPropertyValue(this.property);
-      if (optionValue !== undefined && optionValue > targetValue) {
-        return i;
-      }
-    }
-    
-    return -1;
+    this.correctAnswer = correctAnswerIndex;
   }
 
   checkAnswer(answerIndex) {
@@ -54,14 +45,14 @@ class Question {
   }
 
   getQuestionText() {
-    return `Which has more ${this.property} than ${this.targetPick.name}?`;
+    return `Who ${this.fact.description}?`;
   }
 }
 
 class DataLoader {
   constructor() {
     this.picks = [];
-    this.propertyCategories = {};
+    this.facts = [];
   }
 
   async load() {
@@ -72,19 +63,28 @@ class DataLoader {
     return this.picks;
   }
 
+  getFacts() {
+    return this.facts;
+  }
+
   getRandomPick() {
     if (this.picks.length === 0) return null;
     const index = Math.floor(Math.random() * this.picks.length);
     return this.picks[index];
   }
 
-  findPicksWithSharedProperties(pick, count = 3) {
-    const propertyNames = pick.getPropertyNames();
-    const candidates = this.picks.filter(p => {
-      if (p.id === pick.id) return false;
-      return propertyNames.some(prop => p.hasProperty(prop));
-    });
+  getRandomFact() {
+    if (this.facts.length === 0) return null;
+    const index = Math.floor(Math.random() * this.facts.length);
+    return this.facts[index];
+  }
 
+  findPicksWithFact(factId) {
+    return this.picks.filter(pick => pick.hasFact(factId));
+  }
+
+  findPicksWithoutFact(factId, count = 2) {
+    const candidates = this.picks.filter(pick => !pick.hasFact(factId));
     return this.getRandomSubset(candidates, count);
   }
 
@@ -93,8 +93,8 @@ class DataLoader {
     return shuffled.slice(0, Math.min(count, shuffled.length));
   }
 
-  getPropertyCategoryImage(propertyName) {
-    return this.propertyCategories[propertyName]?.image || null;
+  getFactById(factId) {
+    return this.facts.find(fact => fact.id === factId) || null;
   }
 }
 
@@ -118,18 +118,26 @@ class JSONLoader extends DataLoader {
   }
 
   parseData(data) {
-    if (data.propertyCategories) {
-      this.propertyCategories = data.propertyCategories;
+    // Load facts first
+    if (data.facts && Array.isArray(data.facts)) {
+      this.facts = data.facts.map(factData => {
+        return new Fact(
+          factData.id,
+          factData.description,
+          factData.category,
+          factData.image
+        );
+      });
     }
 
+    // Load picks
     if (data.picks && Array.isArray(data.picks)) {
       this.picks = data.picks.map(pickData => {
         return new Pick(
           pickData.id,
           pickData.name,
-          pickData.properties,
-          pickData.image,
-          pickData.propertyImages
+          pickData.factIds || [],
+          pickData.image
         );
       });
     }
@@ -190,77 +198,47 @@ class GameEngine {
     while (attempts < maxAttempts) {
       attempts++;
       
-      const targetPick = this.dataLoader.getRandomPick();
-      if (!targetPick) {
+      // Pick a random fact
+      const fact = this.dataLoader.getRandomFact();
+      if (!fact) {
         continue;
       }
 
-      const sharedPropertyPicks = this.dataLoader.findPicksWithSharedProperties(
-        targetPick,
-        this.options.optionsPerQuestion * 3 // Get more candidates
+      // Find picks that have this fact
+      const picksWithFact = this.dataLoader.findPicksWithFact(fact.id);
+      if (picksWithFact.length === 0) {
+        continue;
+      }
+
+      // Pick a random pick that has the fact (correct answer)
+      const correctPick = picksWithFact[Math.floor(Math.random() * picksWithFact.length)];
+
+      // Find picks that don't have this fact (incorrect options)
+      const wrongPicks = this.dataLoader.findPicksWithoutFact(
+        fact.id,
+        this.options.optionsPerQuestion - 1
       );
 
-      if (sharedPropertyPicks.length === 0) {
+      if (wrongPicks.length < this.options.optionsPerQuestion - 1) {
         continue;
       }
 
-      const commonProperties = this.findCommonProperties(targetPick, sharedPropertyPicks);
-      if (commonProperties.length === 0) {
-        continue;
-      }
-
-      const property = commonProperties[Math.floor(Math.random() * commonProperties.length)];
+      // Combine correct and wrong picks
+      const options = [correctPick, ...wrongPicks];
       
-      const validOptions = sharedPropertyPicks.filter(pick => {
-        const value = pick.getPropertyValue(property);
-        return value !== undefined && value > targetPick.getPropertyValue(property);
-      });
-
-      if (validOptions.length === 0) {
-        continue;
-      }
-
-      const selectedOption = validOptions[Math.floor(Math.random() * validOptions.length)];
-      
-      const otherOptions = this.dataLoader.findPicksWithSharedProperties(
-        targetPick,
-        this.options.optionsPerQuestion - 1
-      ).filter(p => {
-        // Ensure other options don't also have values greater than target
-        if (p.id === selectedOption.id) return false;
-        const value = p.getPropertyValue(property);
-        return value === undefined || value <= targetPick.getPropertyValue(property);
-      });
-
-      const options = [selectedOption, ...otherOptions].slice(0, this.options.optionsPerQuestion);
-      
-      if (options.length < this.options.optionsPerQuestion) {
-        continue;
-      }
-      
+      // Shuffle options
       this.shuffleArray(options);
+      
+      // Find the index of the correct answer
+      const correctAnswerIndex = options.findIndex(pick => pick.id === correctPick.id);
 
-      const propertyImage = this.dataLoader.getPropertyCategoryImage(property);
-      this.currentQuestion = new Question(targetPick, options, property, propertyImage);
+      this.currentQuestion = new Question(fact, options, correctAnswerIndex);
       
       return this.currentQuestion;
     }
     
     // If we couldn't find a question after max attempts, return null
     return null;
-  }
-
-  findCommonProperties(targetPick, otherPicks) {
-    const targetProperties = targetPick.getPropertyNames();
-    const common = [];
-
-    for (const prop of targetProperties) {
-      if (otherPicks.some(pick => pick.hasProperty(prop))) {
-        common.push(prop);
-      }
-    }
-
-    return common;
   }
 
   shuffleArray(array) {
@@ -342,10 +320,9 @@ class GameUI {
       score: document.getElementById('score'),
       bestScore: document.getElementById('best-score'),
       timer: document.getElementById('timer'),
-      targetImage: document.getElementById('target-image'),
-      targetName: document.getElementById('target-name'),
+      categoryBadge: document.getElementById('category-badge'),
+      factImage: document.getElementById('fact-image'),
       question: document.getElementById('question'),
-      propertyImage: document.getElementById('property-image'),
       options: document.getElementById('options'),
       resultTitle: document.getElementById('result-title'),
       resultMessage: document.getElementById('result-message'),
@@ -417,10 +394,24 @@ class GameUI {
   }
 
   async showSlotMachineAnimation(question) {
-    const targetPick = question.targetPick;
     const allPicks = this.gameEngine.dataLoader.getPicks();
+    const allFacts = this.gameEngine.dataLoader.getFacts();
     const shuffleCount = 8;
     const shuffleDuration = 60;
+
+    // Display category badge
+    if (this.elements.categoryBadge) {
+      this.elements.categoryBadge.textContent = question.fact.category;
+      this.elements.categoryBadge.classList.add('visible');
+    }
+
+    // Display fact image if available
+    if (question.fact.image && this.elements.factImage) {
+      this.elements.factImage.innerHTML = `<img src="${question.fact.image}" alt="${question.fact.category}">`;
+      this.elements.factImage.classList.add('visible');
+    } else if (this.elements.factImage) {
+      this.elements.factImage.classList.remove('visible');
+    }
 
     // Display options
     this.elements.options.innerHTML = '';
@@ -433,13 +424,9 @@ class GameUI {
       
       const optionName = document.createElement('div');
       optionName.className = 'option-name pixel-text';
-
-      const optionValue = document.createElement('div');
-      optionValue.className = 'option-value pixel-text';
       
       optionCard.appendChild(optionImage);
       optionCard.appendChild(optionName);
-      optionCard.appendChild(optionValue);
       
       optionCard.addEventListener('click', () => this.handleAnswer(index, optionCard));
       
@@ -448,36 +435,15 @@ class GameUI {
 
     const optionCards = Array.from(this.elements.options.children);
 
-    // Animate target pick
+    // Animate question text with random facts
     for (let i = 0; i < shuffleCount; i++) {
-      const randomPick = allPicks[Math.floor(Math.random() * allPicks.length)];
-      this.elements.targetName.textContent = randomPick.name;
-      if (randomPick.image) {
-        this.elements.targetImage.innerHTML = `<img src="${randomPick.image}" alt="${randomPick.name}">`;
-      } else {
-        this.elements.targetImage.innerHTML = '👤';
-      }
+      const randomFact = allFacts[Math.floor(Math.random() * allFacts.length)];
+      this.elements.question.textContent = `Who ${randomFact.description}?`;
       await new Promise(resolve => setTimeout(resolve, shuffleDuration));
     }
 
-    // Set final target
-    this.elements.targetName.textContent = targetPick.name;
-    if (targetPick.image) {
-      this.elements.targetImage.innerHTML = `<img src="${targetPick.image}" alt="${targetPick.name}">`;
-    } else {
-      this.elements.targetImage.innerHTML = '👤';
-    }
-
-    // Display question text
+    // Set final question text
     this.elements.question.textContent = question.getQuestionText();
-
-    // Display property image if available
-    if (question.propertyImage) {
-      this.elements.propertyImage.innerHTML = `<img src="${question.propertyImage}" alt="${question.property}">`;
-      this.elements.propertyImage.classList.add('visible');
-    } else {
-      this.elements.propertyImage.classList.remove('visible');
-    }
 
     // Animate options
     for (let i = 0; i < shuffleCount; i++) {
@@ -485,7 +451,6 @@ class GameUI {
         const randomPick = allPicks[Math.floor(Math.random() * allPicks.length)];
         const optionImage = card.querySelector('.option-image');
         const optionName = card.querySelector('.option-name');
-        const optionValue = card.querySelector('.option-value');
 
         optionName.textContent = randomPick.name;
         if (randomPick.image) {
@@ -493,7 +458,6 @@ class GameUI {
         } else {
           optionImage.textContent = '👤';
         }
-        optionValue.textContent = `???`;
       });
       await new Promise(resolve => setTimeout(resolve, shuffleDuration));
     }
@@ -503,7 +467,6 @@ class GameUI {
       const option = question.options[index];
       const optionImage = card.querySelector('.option-image');
       const optionName = card.querySelector('.option-name');
-      const optionValue = card.querySelector('.option-value');
 
       optionName.textContent = option.name;
       if (option.image) {
@@ -511,7 +474,6 @@ class GameUI {
       } else {
         optionImage.textContent = '👤';
       }
-      optionValue.textContent = `${question.property}: ${option.getPropertyValue(question.property)}`;
     });
   }
 
@@ -614,8 +576,7 @@ class GameUI {
     const question = this.gameEngine.getCurrentQuestion();
     const correctOption = question.options[question.correctAnswer];
     this.elements.resultMessage.textContent = 
-      `${correctOption.name} has ${correctOption.getPropertyValue(question.property)} ${question.property}!\n` +
-      `${question.targetPick.name} has ${question.targetPick.getPropertyValue(question.property)} ${question.property}.`;
+      `${correctOption.name} ${question.fact.description}!`;
     
     this.showScreen('result');
   }
