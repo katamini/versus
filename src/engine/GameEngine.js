@@ -87,17 +87,22 @@ class GameEngine {
         continue;
       }
 
-      // Find the pick with the highest quantity for this fact
-      let correctPick = picksWithFact[0];
-      let maxQuantity = correctPick.getFactQuantity(fact.description);
+      // Find the pick(s) with the highest quantity for this fact
+      let maxQuantity = 0;
+      let tiedPicks = [];
       
-      for (let i = 1; i < picksWithFact.length; i++) {
-        const quantity = picksWithFact[i].getFactQuantity(fact.description);
+      for (const pick of picksWithFact) {
+        const quantity = pick.getFactQuantity(fact.description);
         if (quantity > maxQuantity) {
           maxQuantity = quantity;
-          correctPick = picksWithFact[i];
+          tiedPicks = [pick];
+        } else if (quantity === maxQuantity) {
+          tiedPicks.push(pick);
         }
       }
+      
+      // Randomly select among tied picks
+      const correctPick = tiedPicks[Math.floor(Math.random() * tiedPicks.length)];
 
       // Find picks that don't have this fact (incorrect options)
       const wrongPicks = this.dataLoader.findPicksWithoutFact(

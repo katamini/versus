@@ -97,7 +97,7 @@ class DatabaseEditor {
         facts.push({
           description: desc,
           category: cat,
-          quantity: qty ? parseInt(qty) : null,
+          quantity: qty ? parseInt(qty, 10) : null,
           image: img || null
         });
       }
