@@ -8,6 +8,19 @@
 const fs = require('fs');
 const path = require('path');
 
+// Helper function to detect if JSON data is in compact format
+function isCompactFormat(jsonData) {
+  return !jsonData.facts || !Array.isArray(jsonData.facts) || jsonData.facts.length === 0;
+}
+
+// Helper function to generate a unique fact ID from description and category
+function generateFactId(description, category) {
+  return `${description}_${category}`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
 // Simple SQLite database generator (creates SQL script)
 function generateSQLiteScript(jsonData, outputPath) {
   let sql = '-- VERSUS Game Database\n';
@@ -35,9 +48,7 @@ function generateSQLiteScript(jsonData, outputPath) {
   sql += ');\n\n';
   
   // Detect format: compact (facts embedded in picks) or legacy (separate facts array)
-  const isCompactFormat = !jsonData.facts || !Array.isArray(jsonData.facts) || jsonData.facts.length === 0;
-  
-  if (isCompactFormat) {
+  if (isCompactFormat(jsonData)) {
     // Handle compact format: extract unique facts from picks
     const factsMap = new Map(); // key: fact_id, value: fact object
     const pickFactRelations = []; // array of {pick_id, fact_id}
@@ -46,10 +57,7 @@ function generateSQLiteScript(jsonData, outputPath) {
       if (pick.facts && Array.isArray(pick.facts)) {
         for (const fact of pick.facts) {
           // Generate a unique fact ID based on description and category
-          const factId = `${fact.description}_${fact.category}`
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '_')
-            .replace(/^_+|_+$/g, '');
+          const factId = generateFactId(fact.description, fact.category);
           
           // Store unique fact
           if (!factsMap.has(factId)) {
@@ -157,17 +165,13 @@ function main() {
       
       // Count facts
       const allFacts = new Set();
-      const isCompactFormat = !jsonData.facts || !Array.isArray(jsonData.facts) || jsonData.facts.length === 0;
       
-      if (isCompactFormat) {
+      if (isCompactFormat(jsonData)) {
         // Count facts embedded in picks
         for (const pick of jsonData.picks) {
           if (pick.facts && Array.isArray(pick.facts)) {
             for (const fact of pick.facts) {
-              const factId = `${fact.description}_${fact.category}`
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '_')
-                .replace(/^_+|_+$/g, '');
+              const factId = generateFactId(fact.description, fact.category);
               allFacts.add(factId);
             }
           }
