@@ -51,7 +51,7 @@ class Question {
   }
 
   getQuestionText() {
-    return `Who ${this.fact.description}?`;
+    return this.fact.description;
   }
 }
 

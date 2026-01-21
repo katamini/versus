@@ -27,7 +27,7 @@ class Question {
    * @returns {string}
    */
   getQuestionText() {
-    return `Who ${this.fact.description}?`;
+    return this.fact.description;
   }
 }
 
