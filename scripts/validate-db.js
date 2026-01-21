@@ -24,7 +24,7 @@ function validateJSON(jsonPath) {
     }
     
     // Detect format: compact (facts embedded in picks) or legacy (separate facts array)
-    const isCompactFormat = !data.facts;
+    const isCompactFormat = !data.facts || !Array.isArray(data.facts) || data.facts.length === 0;
     
     if (isCompactFormat) {
       // Validate compact format where facts are embedded in picks
@@ -77,19 +77,19 @@ function validateJSON(jsonPath) {
       console.log(`  ✓ ${pickIds.size} unique pick IDs`);
       
       // Check for fact distribution (needed for gameplay)
-      const factDescriptionCount = new Map();
+      const descriptionUsageCount = new Map();
       for (const pick of data.picks) {
         for (const fact of pick.facts) {
           const key = fact.description;
-          factDescriptionCount.set(key, (factDescriptionCount.get(key) || 0) + 1);
+          descriptionUsageCount.set(key, (descriptionUsageCount.get(key) || 0) + 1);
         }
       }
       
-      const sharedFacts = Array.from(factDescriptionCount.entries())
+      const sharedFacts = Array.from(descriptionUsageCount.entries())
         .filter(([_, count]) => count > 1);
       
       if (sharedFacts.length > 0) {
-        console.log(`  ℹ Info: ${sharedFacts.length} fact descriptions are shared by multiple picks (good for gameplay)`);
+        console.log(`  ℹ ${sharedFacts.length} fact descriptions shared by multiple picks (enables quantity comparison gameplay)`);
       }
       
     } else {
