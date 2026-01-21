@@ -1,5 +1,5 @@
 -- VERSUS Game Database
--- Generated: 2026-01-18T23:43:29.275Z
+-- Generated: 2026-01-21T14:20:53.741Z
 
 CREATE TABLE IF NOT EXISTS picks (
   id TEXT PRIMARY KEY,
@@ -22,44 +22,103 @@ CREATE TABLE IF NOT EXISTS pick_facts (
   FOREIGN KEY (fact_id) REFERENCES facts(id)
 );
 
-INSERT INTO facts (id, description, category, image) VALUES ('nobel_prize', 'WON THE NOBEL PRIZE', 'AWARDS', NULL);
-INSERT INTO facts (id, description, category, image) VALUES ('hotdog_champion', 'ATE THE MOST HOTDOGS', 'FOOD', NULL);
-INSERT INTO facts (id, description, category, image) VALUES ('tallest_person', 'IS THE TALLEST PERSON', 'PHYSICAL', NULL);
-INSERT INTO facts (id, description, category, image) VALUES ('fastest_runner', 'IS THE FASTEST RUNNER', 'SPORTS', NULL);
-INSERT INTO facts (id, description, category, image) VALUES ('richest_person', 'IS THE RICHEST PERSON', 'MONEY', NULL);
-INSERT INTO facts (id, description, category, image) VALUES ('most_pets', 'HAS THE MOST PETS', 'ANIMALS', NULL);
-INSERT INTO facts (id, description, category, image) VALUES ('youngest', 'IS THE YOUNGEST', 'AGE', NULL);
-INSERT INTO facts (id, description, category, image) VALUES ('biggest_library', 'HAS THE BIGGEST LIBRARY', 'BOOKS', NULL);
+INSERT INTO picks (id, name, image) VALUES ('1', 'Gegia', NULL);
 
-INSERT INTO picks (id, name, image) VALUES ('1', 'Alice', NULL);
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('1', 'nobel_prize');
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('1', 'biggest_library');
+INSERT INTO picks (id, name, image) VALUES ('2', 'Bud Spencer', NULL);
 
-INSERT INTO picks (id, name, image) VALUES ('2', 'Bob', NULL);
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('2', 'richest_person');
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('2', 'tallest_person');
+INSERT INTO picks (id, name, image) VALUES ('3', 'Iva Zanicchi', NULL);
 
-INSERT INTO picks (id, name, image) VALUES ('3', 'Charlie', NULL);
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('3', 'hotdog_champion');
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('3', 'youngest');
+INSERT INTO picks (id, name, image) VALUES ('4', 'Fabrizio Corona', NULL);
 
-INSERT INTO picks (id, name, image) VALUES ('4', 'Diana', NULL);
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('4', 'most_pets');
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('4', 'fastest_runner');
+INSERT INTO picks (id, name, image) VALUES ('5', 'Flavia Vento', NULL);
 
-INSERT INTO picks (id, name, image) VALUES ('5', 'Eve', NULL);
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('5', 'fastest_runner');
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('5', 'richest_person');
+INSERT INTO picks (id, name, image) VALUES ('6', 'Germano Mosconi', NULL);
 
-INSERT INTO picks (id, name, image) VALUES ('6', 'Frank', NULL);
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('6', 'most_pets');
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('6', 'hotdog_champion');
+INSERT INTO picks (id, name, image) VALUES ('7', 'Giucas Casella', NULL);
 
-INSERT INTO picks (id, name, image) VALUES ('7', 'Grace', NULL);
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('7', 'biggest_library');
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('7', 'tallest_person');
+INSERT INTO picks (id, name, image) VALUES ('8', 'Valeria Marini', NULL);
 
-INSERT INTO picks (id, name, image) VALUES ('8', 'Henry', NULL);
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('8', 'nobel_prize');
-INSERT INTO pick_facts (pick_id, fact_id) VALUES ('8', 'youngest');
+INSERT INTO picks (id, name, image) VALUES ('9', 'Wanna Marchi', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('10', 'Lino Banfi', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('11', 'Vittorio Sgarbi', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('12', 'Pamela Prati', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('13', 'I Ragazzi della 3C', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('14', 'Robocop', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('15', 'Santi Licheri', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('16', 'Platinette', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('17', 'Lele Mora', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('18', 'Ezio Greggio', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('19', 'Il Mago Otelma', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('20', 'Alvaro Vitali', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('21', 'Gigi D''Alessio', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('22', 'Mara Maionchi', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('23', 'Teo Mammucari', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('24', 'Paolo Bonolis', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('25', 'Antonella Mosetti', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('26', 'Karina Cascella', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('27', 'Maria Teresa Ruta', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('28', 'Tommaso Zorzi', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('29', 'Soleil Sorge', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('30', 'Francesca Cipriani', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('31', 'Alex Belli', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('32', 'Cristiano Malgioglio', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('33', 'Rita Pavone', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('34', 'DJ Francesco', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('35', 'Dan Harrow', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('36', 'Elio e le Storie Tese', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('37', 'Giampiero Galeazzi', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('38', 'Mike Bongiorno', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('39', 'Raffaella Carrà', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('40', 'Heather Parisi', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('41', 'Lorella Cuccarini', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('42', 'Chuck Norris', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('43', 'Steven Seagal', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('44', 'Nicolas Cage', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('45', 'David Hasselhoff', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('46', 'Jean-Claude Van Damme', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('47', 'Mr. T', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('48', 'Bruno Sacchi', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('49', 'Caparezza', NULL);
+
+INSERT INTO picks (id, name, image) VALUES ('50', 'Gianni Morandi', NULL);
 
