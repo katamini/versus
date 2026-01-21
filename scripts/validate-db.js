@@ -23,97 +23,169 @@ function validateJSON(jsonPath) {
       throw new Error('No picks defined in database');
     }
     
-    if (!data.facts || !Array.isArray(data.facts)) {
-      throw new Error('Missing or invalid "facts" array');
-    }
+    // Detect format: compact (facts embedded in picks) or legacy (separate facts array)
+    const isCompactFormat = !data.facts || !Array.isArray(data.facts) || data.facts.length === 0;
     
-    if (data.facts.length === 0) {
-      throw new Error('No facts defined in database');
-    }
-    
-    // Validate facts
-    const factIds = new Set();
-    for (let i = 0; i < data.facts.length; i++) {
-      const fact = data.facts[i];
+    if (isCompactFormat) {
+      // Validate compact format where facts are embedded in picks
+      const pickIds = new Set();
+      let totalFacts = 0;
       
-      if (!fact.id) {
-        throw new Error(`Fact at index ${i} is missing an 'id' field`);
-      }
-      
-      if (factIds.has(fact.id)) {
-        throw new Error(`Duplicate fact id: ${fact.id}`);
-      }
-      factIds.add(fact.id);
-      
-      if (!fact.description) {
-        throw new Error(`Fact ${fact.id} is missing a 'description' field`);
-      }
-      
-      if (!fact.category) {
-        throw new Error(`Fact ${fact.id} is missing a 'category' field`);
-      }
-    }
-    
-    // Validate each pick
-    const pickIds = new Set();
-    for (let i = 0; i < data.picks.length; i++) {
-      const pick = data.picks[i];
-      
-      if (!pick.id) {
-        throw new Error(`Pick at index ${i} is missing an 'id' field`);
-      }
-      
-      if (pickIds.has(pick.id)) {
-        throw new Error(`Duplicate pick id: ${pick.id}`);
-      }
-      pickIds.add(pick.id);
-      
-      if (!pick.name) {
-        throw new Error(`Pick ${pick.id} is missing a 'name' field`);
-      }
-      
-      if (!pick.factIds || !Array.isArray(pick.factIds)) {
-        throw new Error(`Pick ${pick.id} is missing or has invalid 'factIds' array`);
-      }
-      
-      if (pick.factIds.length === 0) {
-        throw new Error(`Pick ${pick.id} has no facts assigned`);
-      }
-      
-      // Validate that factIds reference existing facts
-      for (const factId of pick.factIds) {
-        if (!factIds.has(factId)) {
-          throw new Error(`Pick ${pick.id} references non-existent fact: ${factId}`);
+      for (let i = 0; i < data.picks.length; i++) {
+        const pick = data.picks[i];
+        
+        if (!pick.id) {
+          throw new Error(`Pick at index ${i} is missing an 'id' field`);
+        }
+        
+        if (pickIds.has(pick.id)) {
+          throw new Error(`Duplicate pick id: ${pick.id}`);
+        }
+        pickIds.add(pick.id);
+        
+        if (!pick.name) {
+          throw new Error(`Pick ${pick.id} is missing a 'name' field`);
+        }
+        
+        if (!pick.facts || !Array.isArray(pick.facts)) {
+          throw new Error(`Pick ${pick.id} is missing or has invalid 'facts' array`);
+        }
+        
+        if (pick.facts.length === 0) {
+          throw new Error(`Pick ${pick.id} has no facts assigned`);
+        }
+        
+        // Validate each fact in the pick
+        for (let j = 0; j < pick.facts.length; j++) {
+          const fact = pick.facts[j];
+          
+          if (!fact.description) {
+            throw new Error(`Pick ${pick.id}: fact at index ${j} is missing 'description' field`);
+          }
+          
+          if (!fact.category) {
+            throw new Error(`Pick ${pick.id}: fact at index ${j} is missing 'category' field`);
+          }
+          
+          totalFacts++;
         }
       }
-    }
-    
-    console.log(`  ✓ Valid structure`);
-    console.log(`  ✓ ${data.facts.length} facts validated`);
-    console.log(`  ✓ ${data.picks.length} picks validated`);
-    console.log(`  ✓ ${pickIds.size} unique pick IDs`);
-    
-    // Check for fact distribution (needed for gameplay)
-    const factUsageCount = new Map();
-    for (const pick of data.picks) {
-      for (const factId of pick.factIds) {
-        factUsageCount.set(factId, (factUsageCount.get(factId) || 0) + 1);
+      
+      console.log(`  ✓ Valid compact format structure`);
+      console.log(`  ✓ ${data.picks.length} picks validated`);
+      console.log(`  ✓ ${totalFacts} facts embedded in picks`);
+      console.log(`  ✓ ${pickIds.size} unique pick IDs`);
+      
+      // Check for fact distribution (needed for gameplay)
+      const descriptionUsageCount = new Map();
+      for (const pick of data.picks) {
+        for (const fact of pick.facts) {
+          const key = fact.description;
+          descriptionUsageCount.set(key, (descriptionUsageCount.get(key) || 0) + 1);
+        }
       }
+      
+      const sharedFacts = Array.from(descriptionUsageCount.entries())
+        .filter(([_, count]) => count > 1);
+      
+      if (sharedFacts.length > 0) {
+        console.log(`  ℹ ${sharedFacts.length} fact descriptions shared by multiple picks (enables quantity comparison gameplay)`);
+      }
+      
+    } else {
+      // Validate legacy format with separate facts array
+      if (!Array.isArray(data.facts)) {
+        throw new Error('Missing or invalid "facts" array');
+      }
+      
+      if (data.facts.length === 0) {
+        throw new Error('No facts defined in database');
+      }
+      
+      // Validate facts
+      const factIds = new Set();
+      for (let i = 0; i < data.facts.length; i++) {
+        const fact = data.facts[i];
+        
+        if (!fact.id) {
+          throw new Error(`Fact at index ${i} is missing an 'id' field`);
+        }
+        
+        if (factIds.has(fact.id)) {
+          throw new Error(`Duplicate fact id: ${fact.id}`);
+        }
+        factIds.add(fact.id);
+        
+        if (!fact.description) {
+          throw new Error(`Fact ${fact.id} is missing a 'description' field`);
+        }
+        
+        if (!fact.category) {
+          throw new Error(`Fact ${fact.id} is missing a 'category' field`);
+        }
+      }
+      
+      // Validate each pick
+      const pickIds = new Set();
+      for (let i = 0; i < data.picks.length; i++) {
+        const pick = data.picks[i];
+        
+        if (!pick.id) {
+          throw new Error(`Pick at index ${i} is missing an 'id' field`);
+        }
+        
+        if (pickIds.has(pick.id)) {
+          throw new Error(`Duplicate pick id: ${pick.id}`);
+        }
+        pickIds.add(pick.id);
+        
+        if (!pick.name) {
+          throw new Error(`Pick ${pick.id} is missing a 'name' field`);
+        }
+        
+        if (!pick.factIds || !Array.isArray(pick.factIds)) {
+          throw new Error(`Pick ${pick.id} is missing or has invalid 'factIds' array`);
+        }
+        
+        if (pick.factIds.length === 0) {
+          throw new Error(`Pick ${pick.id} has no facts assigned`);
+        }
+        
+        // Validate that factIds reference existing facts
+        for (const factId of pick.factIds) {
+          if (!factIds.has(factId)) {
+            throw new Error(`Pick ${pick.id} references non-existent fact: ${factId}`);
+          }
+        }
+      }
+      
+      console.log(`  ✓ Valid legacy format structure`);
+      console.log(`  ✓ ${data.facts.length} facts validated`);
+      console.log(`  ✓ ${data.picks.length} picks validated`);
+      console.log(`  ✓ ${pickIds.size} unique pick IDs`);
+      
+      // Check for fact distribution (needed for gameplay)
+      const factUsageCount = new Map();
+      for (const pick of data.picks) {
+        for (const factId of pick.factIds) {
+          factUsageCount.set(factId, (factUsageCount.get(factId) || 0) + 1);
+        }
+      }
+      
+      const sharedFacts = Array.from(factUsageCount.entries())
+        .filter(([_, count]) => count > 1);
+      
+      if (sharedFacts.length > 0) {
+        console.warn(`  ⚠ Warning: ${sharedFacts.length} facts are shared by multiple picks. This may reduce game variety.`);
+      }
+      
+      const picksWithoutFacts = data.picks.filter(p => !p.factIds || p.factIds.length === 0).length;
+      if (picksWithoutFacts > 0) {
+        console.warn(`  ⚠ Warning: ${picksWithoutFacts} picks have no facts assigned`);
+      }
+      
+      console.log(`  ✓ All fact references are valid`);
     }
-    
-    const sharedFacts = Array.from(factUsageCount.entries())
-      .filter(([_, count]) => count > 1);
-    
-    if (sharedFacts.length > 0) {
-      console.warn(`  ⚠ Warning: ${sharedFacts.length} facts are shared by multiple picks. This may reduce game variety.`);
-    }
-    
-    const picksWithoutFacts = data.picks.filter(p => !p.factIds || p.factIds.length === 0).length;
-    if (picksWithoutFacts > 0) {
-      console.warn(`  ⚠ Warning: ${picksWithoutFacts} picks have no facts assigned`);
-    }
-    
-    console.log(`  ✓ All fact references are valid`);
     
     return true;
   } catch (error) {
