@@ -2,150 +2,1018 @@
   "picks": [
     {
       "id": "1",
-      "name": "Alice",
-      "description": "Famous Singer",
+      "name": "Gegia",
+      "description": "Regina delle Televendite",
       "image": null,
       "facts": [
         {
-          "description": "WON THE NOBEL PRIZE",
-          "category": "AWARDS",
+          "description": "PARTECIPAZIONI A REALITY SHOW",
+          "category": "REALITY",
           "quantity": 1,
           "image": null
         },
         {
-          "description": "HAS THE BIGGEST LIBRARY",
-          "category": "BOOKS",
+          "description": "ESPULSIONE DALL'ALBO",
+          "category": "CULTURA",
+          "quantity": 1,
+          "image": null
+        },
+        {
+          "description": "SCENE SPINTE NEI FILM",
+          "category": "TRASH",
+          "quantity": 0,
           "image": null
         }
       ]
     },
     {
       "id": "2",
-      "name": "Bob",
-      "description": "Rich Businessman",
+      "name": "Bud Spencer",
+      "description": "Il Gigante Buono",
       "image": null,
       "facts": [
         {
-          "description": "IS THE RICHEST PERSON",
-          "category": "MONEY",
+          "description": "CAZZOTTI DATI NEI FILM",
+          "category": "VIOLENZA",
+          "quantity": 3794,
           "image": null
         },
         {
-          "description": "IS THE TALLEST PERSON",
-          "category": "PHYSICAL",
+          "description": "FILM GIRATI",
+          "category": "CINEMA",
+          "quantity": 78,
           "image": null
         }
       ]
     },
     {
       "id": "3",
-      "name": "Charlie",
-      "description": "Food Champion",
+      "name": "Iva Zanicchi",
+      "description": "L'Aquila di Ligonchio",
       "image": null,
       "facts": [
         {
-          "description": "ATE THE MOST HOTDOGS",
-          "category": "FOOD",
-          "quantity": 75,
+          "description": "PARTECIPAZIONI A SANREMO",
+          "category": "FESTIVAL",
+          "quantity": 11,
           "image": null
         },
         {
-          "description": "IS THE YOUNGEST",
-          "category": "AGE",
+          "description": "ANNI DI CARRIERA",
+          "category": "LONGEVITÀ",
+          "quantity": 58,
           "image": null
         }
       ]
     },
     {
       "id": "4",
-      "name": "Diana",
-      "description": "Animal Lover",
+      "name": "Fabrizio Corona",
+      "description": "Re del Gossip",
       "image": null,
       "facts": [
         {
-          "description": "HAS THE MOST PETS",
-          "category": "ANIMALS",
-          "quantity": 15,
+          "description": "MESI IN GALERA O AI DOMICILIARI",
+          "category": "GALERA",
+          "quantity": 84,
           "image": null
         },
         {
-          "description": "IS THE FASTEST RUNNER",
-          "category": "SPORTS",
+          "description": "SCANDALI DOCUMENTATI",
+          "category": "SCANDALI",
+          "quantity": 156,
           "image": null
         }
       ]
     },
     {
       "id": "5",
-      "name": "Eve",
-      "description": "Athlete",
+      "name": "Flavia Vento",
+      "description": "La Regina degli Abbandoni",
       "image": null,
       "facts": [
         {
-          "description": "IS THE FASTEST RUNNER",
-          "category": "SPORTS",
+          "description": "REALITY SHOW ABBANDONATI",
+          "category": "RITIRI",
+          "quantity": 4,
           "image": null
         },
         {
-          "description": "IS THE RICHEST PERSON",
-          "category": "MONEY",
+          "description": "INTERVISTE SUGLI ALIENI",
+          "category": "TRASH",
+          "quantity": 23,
           "image": null
         }
       ]
     },
     {
       "id": "6",
-      "name": "Frank",
-      "description": "Animal Enthusiast",
+      "name": "Germano Mosconi",
+      "description": "Il Poeta del Turpiloquio",
       "image": null,
       "facts": [
         {
-          "description": "HAS THE MOST PETS",
-          "category": "ANIMALS",
-          "quantity": 10,
+          "description": "BESTEMMIE IN DIRETTA TV",
+          "category": "PAROLACCE",
+          "quantity": 67,
           "image": null
         },
         {
-          "description": "ATE THE MOST HOTDOGS",
-          "category": "FOOD",
-          "quantity": 50,
+          "description": "MILIONI DI VIEWS SU YOUTUBE",
+          "category": "VIRALITÀ",
+          "quantity": 45,
           "image": null
         }
       ]
     },
     {
       "id": "7",
-      "name": "Grace",
-      "description": "Scholar",
+      "name": "Giucas Casella",
+      "description": "Il Mentalista dei Reality",
       "image": null,
       "facts": [
         {
-          "description": "HAS THE BIGGEST LIBRARY",
-          "category": "BOOKS",
+          "description": "CUCCHIAINI PIEGATI IN TV",
+          "category": "MAGIA",
+          "quantity": 1247,
           "image": null
         },
         {
-          "description": "IS THE TALLEST PERSON",
-          "category": "PHYSICAL",
+          "description": "PARTECIPAZIONI A REALITY SHOW",
+          "category": "REALITY",
+          "quantity": 7,
           "image": null
         }
       ]
     },
     {
       "id": "8",
-      "name": "Henry",
-      "description": "Scientist",
+      "name": "Valeria Marini",
+      "description": "La Stellare",
       "image": null,
       "facts": [
         {
-          "description": "WON THE NOBEL PRIZE",
-          "category": "AWARDS",
-          "quantity": 2,
+          "description": "VOLTE CHE HA DETTO 'STELLARE'",
+          "category": "TORMENTONI",
+          "quantity": 8934,
           "image": null
         },
         {
-          "description": "IS THE YOUNGEST",
-          "category": "AGE",
+          "description": "PARTECIPAZIONI A REALITY SHOW",
+          "category": "REALITY",
+          "quantity": 9,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "name": "Wanna Marchi",
+      "description": "La Venditrice di Miracoli",
+      "image": null,
+      "facts": [
+        {
+          "description": "ANNI IN GALERA SCONTATI",
+          "category": "GALERA",
+          "quantity": 10,
+          "image": null
+        },
+        {
+          "description": "TRUFFE ACCERTATE",
+          "category": "SCANDALI",
+          "quantity": 327,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "name": "Lino Banfi",
+      "description": "Oronzo Canà Nazionale",
+      "image": null,
+      "facts": [
+        {
+          "description": "FILM GIRATI",
+          "category": "CINEMA",
+          "quantity": 103,
+          "image": null
+        },
+        {
+          "description": "VOLTE CHE HA DETTO 'PORCA PUTTENA'",
+          "category": "TORMENTONI",
+          "quantity": 3456,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "name": "Vittorio Sgarbi",
+      "description": "Il Critico Urlante",
+      "image": null,
+      "facts": [
+        {
+          "description": "INSULTI DATI IN TV",
+          "category": "TRASH TALK",
+          "quantity": 5678,
+          "image": null
+        },
+        {
+          "description": "LITIGI TELEVISIVI",
+          "category": "SCANDALI",
+          "quantity": 234,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "name": "Pamela Prati",
+      "description": "Lady Mark Caltagirone",
+      "image": null,
+      "facts": [
+        {
+          "description": "MATRIMONI INVENTATI",
+          "category": "SCANDALI",
+          "quantity": 1,
+          "image": null
+        },
+        {
+          "description": "ANNI DI CARRIERA",
+          "category": "LONGEVITÀ",
+          "quantity": 45,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "name": "I Ragazzi della 3C",
+      "description": "I Secchioni della TV",
+      "image": null,
+      "facts": [
+        {
+          "description": "STAGIONI TRASMESSE",
+          "category": "TV",
+          "quantity": 3,
+          "image": null
+        },
+        {
+          "description": "PUNTATE TOTALI",
+          "category": "TV",
+          "quantity": 60,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "name": "Robocop",
+      "description": "Il Poliziotto Cyborg",
+      "image": null,
+      "facts": [
+        {
+          "description": "CRIMINALI ARRESTATI",
+          "category": "VIOLENZA",
+          "quantity": 847,
+          "image": null
+        },
+        {
+          "description": "FILM DELLA SAGA",
+          "category": "CINEMA",
+          "quantity": 3,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "15",
+      "name": "Santi Licheri",
+      "description": "Il Neomelodico Memetico",
+      "image": null,
+      "facts": [
+        {
+          "description": "CANZONI TRASH PUBBLICATE",
+          "category": "MUSICA",
+          "quantity": 47,
+          "image": null
+        },
+        {
+          "description": "MILIONI DI VIEWS SU YOUTUBE",
+          "category": "VIRALITÀ",
+          "quantity": 12,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "16",
+      "name": "Platinette",
+      "description": "L'Opinionista Senza Filtri",
+      "image": null,
+      "facts": [
+        {
+          "description": "ANNI IN TV",
+          "category": "LONGEVITÀ",
+          "quantity": 32,
+          "image": null
+        },
+        {
+          "description": "LITIGI IN DIRETTA",
+          "category": "TRASH TALK",
+          "quantity": 89,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "17",
+      "name": "Lele Mora",
+      "description": "L'Ex Agente VIP",
+      "image": null,
+      "facts": [
+        {
+          "description": "MESI IN GALERA O AI DOMICILIARI",
+          "category": "GALERA",
+          "quantity": 36,
+          "image": null
+        },
+        {
+          "description": "VIP GESTITI NELLA CARRIERA",
+          "category": "LAVORO",
+          "quantity": 78,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "18",
+      "name": "Ezio Greggio",
+      "description": "Buonaseeera!",
+      "image": null,
+      "facts": [
+        {
+          "description": "PUNTATE DI STRISCIA LA NOTIZIA",
+          "category": "TV",
+          "quantity": 4850,
+          "image": null
+        },
+        {
+          "description": "ANNI DI CARRIERA",
+          "category": "LONGEVITÀ",
+          "quantity": 50,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "19",
+      "name": "Il Mago Otelma",
+      "description": "Il Veggente Mancato",
+      "image": null,
+      "facts": [
+        {
+          "description": "PREVISIONI SBAGLIATE",
+          "category": "EPIC FAIL",
+          "quantity": 2847,
+          "image": null
+        },
+        {
+          "description": "PARTECIPAZIONI A REALITY SHOW",
+          "category": "REALITY",
+          "quantity": 3,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "20",
+      "name": "Alvaro Vitali",
+      "description": "Pierino Eterno",
+      "image": null,
+      "facts": [
+        {
+          "description": "FILM COMICI GIRATI",
+          "category": "CINEMA",
+          "quantity": 87,
+          "image": null
+        },
+        {
+          "description": "SCENE SPINTE NEI FILM",
+          "category": "TRASH",
+          "quantity": 234,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "21",
+      "name": "Gigi D'Alessio",
+      "description": "Il Re del Neomelodico",
+      "image": null,
+      "facts": [
+        {
+          "description": "PARTECIPAZIONI A SANREMO",
+          "category": "FESTIVAL",
+          "quantity": 4,
+          "image": null
+        },
+        {
+          "description": "FIGLI AVUTI",
+          "category": "FAMIGLIA",
+          "quantity": 5,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "22",
+      "name": "Mara Maionchi",
+      "description": "Madonna Che Sbatti!",
+      "image": null,
+      "facts": [
+        {
+          "description": "ANNI NELL'INDUSTRIA MUSICALE",
+          "category": "LONGEVITÀ",
+          "quantity": 52,
+          "image": null
+        },
+        {
+          "description": "VOLTE CHE HA DETTO 'MADONNA'",
+          "category": "TORMENTONI",
+          "quantity": 12456,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "23",
+      "name": "Teo Mammucari",
+      "description": "Il Conduttore Tamarro",
+      "image": null,
+      "facts": [
+        {
+          "description": "PROGRAMMI TV CONDOTTI",
+          "category": "TV",
+          "quantity": 18,
+          "image": null
+        },
+        {
+          "description": "LITIGI CON OSPITI",
+          "category": "TRASH TALK",
+          "quantity": 45,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "24",
+      "name": "Paolo Bonolis",
+      "description": "Il Mattatore",
+      "image": null,
+      "facts": [
+        {
+          "description": "PROGRAMMI TV CONDOTTI",
+          "category": "TV",
+          "quantity": 35,
+          "image": null
+        },
+        {
+          "description": "ANNI DI CARRIERA",
+          "category": "LONGEVITÀ",
+          "quantity": 42,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "25",
+      "name": "Antonella Mosetti",
+      "description": "Reality Veteran",
+      "image": null,
+      "facts": [
+        {
+          "description": "PARTECIPAZIONI A REALITY SHOW",
+          "category": "REALITY",
+          "quantity": 6,
+          "image": null
+        },
+        {
+          "description": "RITOCCHINI ESTETICI AMMESSI",
+          "category": "CHIRURGIA",
+          "quantity": 23,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "26",
+      "name": "Karina Cascella",
+      "description": "L'Opinionista Acida",
+      "image": null,
+      "facts": [
+        {
+          "description": "ANNI A UOMINI E DONNE",
+          "category": "TV",
+          "quantity": 12,
+          "image": null
+        },
+        {
+          "description": "LITIGI IN STUDIO",
+          "category": "TRASH TALK",
+          "quantity": 567,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "27",
+      "name": "Maria Teresa Ruta",
+      "description": "Guenda!",
+      "image": null,
+      "facts": [
+        {
+          "description": "ANNI DI CARRIERA IN TV",
+          "category": "LONGEVITÀ",
+          "quantity": 38,
+          "image": null
+        },
+        {
+          "description": "VOLTE CHE HA URLATO 'GUENDA'",
+          "category": "TORMENTONI",
+          "quantity": 1247,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "28",
+      "name": "Tommaso Zorzi",
+      "description": "L'Influencer Vincente",
+      "image": null,
+      "facts": [
+        {
+          "description": "REALITY SHOW VINTI",
+          "category": "REALITY",
+          "quantity": 1,
+          "image": null
+        },
+        {
+          "description": "FOLLOWER INSTAGRAM (MILIONI)",
+          "category": "SOCIAL",
+          "quantity": 2,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "29",
+      "name": "Soleil Sorge",
+      "description": "La Regina del Trash Talk",
+      "image": null,
+      "facts": [
+        {
+          "description": "PARTECIPAZIONI A REALITY SHOW",
+          "category": "REALITY",
+          "quantity": 4,
+          "image": null
+        },
+        {
+          "description": "LITIGI AL GF VIP",
+          "category": "TRASH TALK",
+          "quantity": 89,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "30",
+      "name": "Francesca Cipriani",
+      "description": "Il Décolleté della TV",
+      "image": null,
+      "facts": [
+        {
+          "description": "PARTECIPAZIONI A REALITY SHOW",
+          "category": "REALITY",
+          "quantity": 8,
+          "image": null
+        },
+        {
+          "description": "RITOCCHINI AL SENO",
+          "category": "CHIRURGIA",
+          "quantity": 7,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "31",
+      "name": "Alex Belli",
+      "description": "Chimica Artistica",
+      "image": null,
+      "facts": [
+        {
+          "description": "TRIANGOLI AMOROSI IN TV",
+          "category": "SCANDALI",
+          "quantity": 3,
+          "image": null
+        },
+        {
+          "description": "VOLTE CHE HA DETTO 'CHIMICA ARTISTICA'",
+          "category": "TORMENTONI",
+          "quantity": 247,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "32",
+      "name": "Cristiano Malgioglio",
+      "description": "Sbarbina Sbarbina",
+      "image": null,
+      "facts": [
+        {
+          "description": "CANZONI SCRITTE PER ALTRI",
+          "category": "MUSICA",
+          "quantity": 134,
+          "image": null
+        },
+        {
+          "description": "PARRUCCHE INDOSSATE IN TV",
+          "category": "LOOK",
+          "quantity": 456,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "33",
+      "name": "Rita Pavone",
+      "description": "La Cantante dei Tweet Bollenti",
+      "image": null,
+      "facts": [
+        {
+          "description": "PARTECIPAZIONI A SANREMO",
+          "category": "FESTIVAL",
+          "quantity": 9,
+          "image": null
+        },
+        {
+          "description": "TWEET CONTROVERSI",
+          "category": "SOCIAL",
+          "quantity": 847,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "34",
+      "name": "DJ Francesco",
+      "description": "Lento Violento",
+      "image": null,
+      "facts": [
+        {
+          "description": "REMIX LENTO VIOLENTO PRODOTTI",
+          "category": "MUSICA",
+          "quantity": 234,
+          "image": null
+        },
+        {
+          "description": "SERATE IN DISCOTECA",
+          "category": "LAVORO",
+          "quantity": 4567,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "35",
+      "name": "Dan Harrow",
+      "description": "Ay Ay Ay Mami",
+      "image": null,
+      "facts": [
+        {
+          "description": "TORMENTONI ESTIVI",
+          "category": "MUSICA",
+          "quantity": 7,
+          "image": null
+        },
+        {
+          "description": "SETTIMANE IN CLASSIFICA",
+          "category": "SUCCESSO",
+          "quantity": 23,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "36",
+      "name": "Elio e le Storie Tese",
+      "description": "Trash Intelligente",
+      "image": null,
+      "facts": [
+        {
+          "description": "PARTECIPAZIONI A SANREMO",
+          "category": "FESTIVAL",
+          "quantity": 6,
+          "image": null
+        },
+        {
+          "description": "ALBUM PUBBLICATI",
+          "category": "MUSICA",
+          "quantity": 14,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "37",
+      "name": "Giampiero Galeazzi",
+      "description": "Ogni Lattina Vale!",
+      "image": null,
+      "facts": [
+        {
+          "description": "ANNI DI CARRIERA RAI",
+          "category": "LONGEVITÀ",
+          "quantity": 45,
+          "image": null
+        },
+        {
+          "description": "OLIMPIADI RACCONTATE",
+          "category": "SPORT",
+          "quantity": 12,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "38",
+      "name": "Mike Bongiorno",
+      "description": "Allegria!",
+      "image": null,
+      "facts": [
+        {
+          "description": "ANNI DI CARRIERA IN TV",
+          "category": "LONGEVITÀ",
+          "quantity": 60,
+          "image": null
+        },
+        {
+          "description": "QUIZ SHOW CONDOTTI",
+          "category": "TV",
+          "quantity": 15,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "39",
+      "name": "Raffaella Carrà",
+      "description": "Icona Camp Internazionale",
+      "image": null,
+      "facts": [
+        {
+          "description": "ANNI DI CARRIERA",
+          "category": "LONGEVITÀ",
+          "quantity": 65,
+          "image": null
+        },
+        {
+          "description": "PAESI DOVE È FAMOSA",
+          "category": "SUCCESSO",
+          "quantity": 47,
+          "image": null
+        },
+        {
+          "description": "ALBUM PUBBLICATI",
+          "category": "MUSICA",
+          "quantity": 38,
+          "image": null
+        },
+      ]
+    },
+    {
+      "id": "40",
+      "name": "Heather Parisi",
+      "description": "La Ballerina Polemica",
+      "image": null,
+      "facts": [
+        {
+          "description": "ANNI IN TV ITALIANA",
+          "category": "LONGEVITÀ",
+          "quantity": 35,
+          "image": null
+        },
+        {
+          "description": "LITIGI PUBBLICI CON LORELLA CUCCARINI",
+          "category": "SCANDALI",
+          "quantity": 12,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "41",
+      "name": "Lorella Cuccarini",
+      "description": "Più Lorella di Sempre",
+      "image": null,
+      "facts": [
+        {
+          "description": "PROGRAMMI TV CONDOTTI",
+          "category": "TV",
+          "quantity": 28,
+          "image": null
+        },
+        {
+          "description": "ANNI DI CARRIERA",
+          "category": "LONGEVITÀ",
+          "quantity": 40,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "42",
+      "name": "Chuck Norris",
+      "description": "La Leggenda dei Meme",
+      "image": null,
+      "facts": [
+        {
+          "description": "FILM D'AZIONE GIRATI",
+          "category": "CINEMA",
+          "quantity": 47,
+          "image": null
+        },
+        {
+          "description": "MEME SU INTERNET",
+          "category": "VIRALITÀ",
+          "quantity": 50000,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "43",
+      "name": "Steven Seagal",
+      "description": "Action Hero Decaduto",
+      "image": null,
+      "facts": [
+        {
+          "description": "FILM D'AZIONE GIRATI",
+          "category": "CINEMA",
+          "quantity": 52,
+          "image": null
+        },
+        {
+          "description": "FILM DIRECT-TO-DVD",
+          "category": "EPIC FAIL",
+          "quantity": 34,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "44",
+      "name": "Nicolas Cage",
+      "description": "Re del B-Movie",
+      "image": null,
+      "facts": [
+        {
+          "description": "FILM GIRATI",
+          "category": "CINEMA",
+          "quantity": 110,
+          "image": null
+        },
+        {
+          "description": "OSCAR VINTI",
+          "category": "PREMI",
+          "quantity": 1,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "45",
+      "name": "David Hasselhoff",
+      "description": "KITT e Baywatch",
+      "image": null,
+      "facts": [
+        {
+          "description": "STAGIONI DI BAYWATCH",
+          "category": "TV",
+          "quantity": 11,
+          "image": null
+        },
+        {
+          "description": "ALBUM MUSICALI FLOP",
+          "category": "EPIC FAIL",
+          "quantity": 7,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "46",
+      "name": "Jean-Claude Van Damme",
+      "description": "Spacchi Epici",
+      "image": null,
+      "facts": [
+        {
+          "description": "FILM D'AZIONE GIRATI",
+          "category": "CINEMA",
+          "quantity": 58,
+          "image": null
+        },
+        {
+          "description": "SPACCHI FATTI NEI FILM",
+          "category": "VIOLENZA",
+          "quantity": 89,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "47",
+      "name": "Mr. T",
+      "description": "I Pity The Fool",
+      "image": null,
+      "facts": [
+        {
+          "description": "COLLANE D'ORO INDOSSATE",
+          "category": "LOOK",
+          "quantity": 234,
+          "image": null
+        },
+        {
+          "description": "VOLTE CHE HA DETTO 'I PITY THE FOOL'",
+          "category": "TORMENTONI",
+          "quantity": 847,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "48",
+      "name": "Bruno Sacchi",
+      "description": "Ciao Cari Amici",
+      "image": null,
+      "facts": [
+        {
+          "description": "ANNI A DRIVE IN",
+          "category": "TV",
+          "quantity": 8,
+          "image": null
+        },
+        {
+          "description": "VOLTE CHE HA DETTO 'CIAO CARI AMICI'",
+          "category": "TORMENTONI",
+          "quantity": 5678,
+          "image": null
+        },
+        {
+          "description": "ALBUM PUBBLICATI",
+          "category": "MUSICA",
+          "quantity": 0,
+          "image": null
+        },
+      ]
+    },
+    {
+      "id": "49",
+      "name": "Caparezza",
+      "description": "Il Rapper Colto",
+      "image": null,
+      "facts": [
+        {
+          "description": "ALBUM PUBBLICATI",
+          "category": "MUSICA",
+          "quantity": 8,
+          "image": null
+        },
+        {
+          "description": "CITAZIONI COLTE NEI TESTI",
+          "category": "CULTURA",
+          "quantity": 847,
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": "50",
+      "name": "Gianni Morandi",
+      "description": "L'Eterno Ragazzo",
+      "image": null,
+      "facts": [
+        {
+          "description": "PARTECIPAZIONI A SANREMO",
+          "category": "FESTIVAL",
+          "quantity": 13,
+          "image": null
+        },
+        {
+          "description": "ANNI DI CARRIERA",
+          "category": "LONGEVITÀ",
+          "quantity": 62,
           "image": null
         }
       ]
