@@ -1,5 +1,5 @@
 -- VERSUS Game Database
--- Generated: 2026-01-21T14:20:53.741Z
+-- Generated: 2026-01-21T14:22:04.632Z
 
 CREATE TABLE IF NOT EXISTS picks (
   id TEXT PRIMARY KEY,
@@ -22,103 +22,233 @@ CREATE TABLE IF NOT EXISTS pick_facts (
   FOREIGN KEY (fact_id) REFERENCES facts(id)
 );
 
+INSERT INTO facts (id, description, category, image) VALUES ('partecipazioni_a_reality_show_reality', 'PARTECIPAZIONI A REALITY SHOW', 'REALITY', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('espulsione_dall_albo_cultura', 'ESPULSIONE DALL''ALBO', 'CULTURA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('scene_spinte_nei_film_trash', 'SCENE SPINTE NEI FILM', 'TRASH', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('cazzotti_dati_nei_film_violenza', 'CAZZOTTI DATI NEI FILM', 'VIOLENZA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('film_girati_cinema', 'FILM GIRATI', 'CINEMA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('partecipazioni_a_sanremo_festival', 'PARTECIPAZIONI A SANREMO', 'FESTIVAL', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('anni_di_carriera_longevit', 'ANNI DI CARRIERA', 'LONGEVITÀ', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('mesi_in_galera_o_ai_domiciliari_galera', 'MESI IN GALERA O AI DOMICILIARI', 'GALERA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('scandali_documentati_scandali', 'SCANDALI DOCUMENTATI', 'SCANDALI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('reality_show_abbandonati_ritiri', 'REALITY SHOW ABBANDONATI', 'RITIRI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('interviste_sugli_alieni_trash', 'INTERVISTE SUGLI ALIENI', 'TRASH', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('bestemmie_in_diretta_tv_parolacce', 'BESTEMMIE IN DIRETTA TV', 'PAROLACCE', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('milioni_di_views_su_youtube_viralit', 'MILIONI DI VIEWS SU YOUTUBE', 'VIRALITÀ', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('cucchiaini_piegati_in_tv_magia', 'CUCCHIAINI PIEGATI IN TV', 'MAGIA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('volte_che_ha_detto_stellare_tormentoni', 'VOLTE CHE HA DETTO ''STELLARE''', 'TORMENTONI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('anni_in_galera_scontati_galera', 'ANNI IN GALERA SCONTATI', 'GALERA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('truffe_accertate_scandali', 'TRUFFE ACCERTATE', 'SCANDALI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('volte_che_ha_detto_porca_puttena_tormentoni', 'VOLTE CHE HA DETTO ''PORCA PUTTENA''', 'TORMENTONI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('insulti_dati_in_tv_trash_talk', 'INSULTI DATI IN TV', 'TRASH TALK', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('litigi_televisivi_scandali', 'LITIGI TELEVISIVI', 'SCANDALI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('matrimoni_inventati_scandali', 'MATRIMONI INVENTATI', 'SCANDALI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('stagioni_trasmesse_tv', 'STAGIONI TRASMESSE', 'TV', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('puntate_totali_tv', 'PUNTATE TOTALI', 'TV', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('criminali_arrestati_violenza', 'CRIMINALI ARRESTATI', 'VIOLENZA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('film_della_saga_cinema', 'FILM DELLA SAGA', 'CINEMA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('canzoni_trash_pubblicate_musica', 'CANZONI TRASH PUBBLICATE', 'MUSICA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('anni_in_tv_longevit', 'ANNI IN TV', 'LONGEVITÀ', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('litigi_in_diretta_trash_talk', 'LITIGI IN DIRETTA', 'TRASH TALK', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('vip_gestiti_nella_carriera_lavoro', 'VIP GESTITI NELLA CARRIERA', 'LAVORO', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('puntate_di_striscia_la_notizia_tv', 'PUNTATE DI STRISCIA LA NOTIZIA', 'TV', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('previsioni_sbagliate_epic_fail', 'PREVISIONI SBAGLIATE', 'EPIC FAIL', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('film_comici_girati_cinema', 'FILM COMICI GIRATI', 'CINEMA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('figli_avuti_famiglia', 'FIGLI AVUTI', 'FAMIGLIA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('anni_nell_industria_musicale_longevit', 'ANNI NELL''INDUSTRIA MUSICALE', 'LONGEVITÀ', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('volte_che_ha_detto_madonna_tormentoni', 'VOLTE CHE HA DETTO ''MADONNA''', 'TORMENTONI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('programmi_tv_condotti_tv', 'PROGRAMMI TV CONDOTTI', 'TV', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('litigi_con_ospiti_trash_talk', 'LITIGI CON OSPITI', 'TRASH TALK', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('ritocchini_estetici_ammessi_chirurgia', 'RITOCCHINI ESTETICI AMMESSI', 'CHIRURGIA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('anni_a_uomini_e_donne_tv', 'ANNI A UOMINI E DONNE', 'TV', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('litigi_in_studio_trash_talk', 'LITIGI IN STUDIO', 'TRASH TALK', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('anni_di_carriera_in_tv_longevit', 'ANNI DI CARRIERA IN TV', 'LONGEVITÀ', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('volte_che_ha_urlato_guenda_tormentoni', 'VOLTE CHE HA URLATO ''GUENDA''', 'TORMENTONI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('reality_show_vinti_reality', 'REALITY SHOW VINTI', 'REALITY', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('follower_instagram_milioni_social', 'FOLLOWER INSTAGRAM (MILIONI)', 'SOCIAL', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('litigi_al_gf_vip_trash_talk', 'LITIGI AL GF VIP', 'TRASH TALK', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('ritocchini_al_seno_chirurgia', 'RITOCCHINI AL SENO', 'CHIRURGIA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('triangoli_amorosi_in_tv_scandali', 'TRIANGOLI AMOROSI IN TV', 'SCANDALI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('volte_che_ha_detto_chimica_artistica_tormentoni', 'VOLTE CHE HA DETTO ''CHIMICA ARTISTICA''', 'TORMENTONI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('canzoni_scritte_per_altri_musica', 'CANZONI SCRITTE PER ALTRI', 'MUSICA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('parrucche_indossate_in_tv_look', 'PARRUCCHE INDOSSATE IN TV', 'LOOK', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('tweet_controversi_social', 'TWEET CONTROVERSI', 'SOCIAL', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('remix_lento_violento_prodotti_musica', 'REMIX LENTO VIOLENTO PRODOTTI', 'MUSICA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('serate_in_discoteca_lavoro', 'SERATE IN DISCOTECA', 'LAVORO', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('tormentoni_estivi_musica', 'TORMENTONI ESTIVI', 'MUSICA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('settimane_in_classifica_successo', 'SETTIMANE IN CLASSIFICA', 'SUCCESSO', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('album_pubblicati_musica', 'ALBUM PUBBLICATI', 'MUSICA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('anni_di_carriera_rai_longevit', 'ANNI DI CARRIERA RAI', 'LONGEVITÀ', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('olimpiadi_raccontate_sport', 'OLIMPIADI RACCONTATE', 'SPORT', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('quiz_show_condotti_tv', 'QUIZ SHOW CONDOTTI', 'TV', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('paesi_dove_famosa_successo', 'PAESI DOVE È FAMOSA', 'SUCCESSO', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('anni_in_tv_italiana_longevit', 'ANNI IN TV ITALIANA', 'LONGEVITÀ', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('litigi_pubblici_con_lorella_cuccarini_scandali', 'LITIGI PUBBLICI CON LORELLA CUCCARINI', 'SCANDALI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('film_d_azione_girati_cinema', 'FILM D''AZIONE GIRATI', 'CINEMA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('meme_su_internet_viralit', 'MEME SU INTERNET', 'VIRALITÀ', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('film_direct_to_dvd_epic_fail', 'FILM DIRECT-TO-DVD', 'EPIC FAIL', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('oscar_vinti_premi', 'OSCAR VINTI', 'PREMI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('stagioni_di_baywatch_tv', 'STAGIONI DI BAYWATCH', 'TV', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('album_musicali_flop_epic_fail', 'ALBUM MUSICALI FLOP', 'EPIC FAIL', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('spacchi_fatti_nei_film_violenza', 'SPACCHI FATTI NEI FILM', 'VIOLENZA', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('collane_d_oro_indossate_look', 'COLLANE D''ORO INDOSSATE', 'LOOK', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('volte_che_ha_detto_i_pity_the_fool_tormentoni', 'VOLTE CHE HA DETTO ''I PITY THE FOOL''', 'TORMENTONI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('anni_a_drive_in_tv', 'ANNI A DRIVE IN', 'TV', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('volte_che_ha_detto_ciao_cari_amici_tormentoni', 'VOLTE CHE HA DETTO ''CIAO CARI AMICI''', 'TORMENTONI', NULL);
+INSERT INTO facts (id, description, category, image) VALUES ('citazioni_colte_nei_testi_cultura', 'CITAZIONI COLTE NEI TESTI', 'CULTURA', NULL);
+
 INSERT INTO picks (id, name, image) VALUES ('1', 'Gegia', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('2', 'Bud Spencer', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('3', 'Iva Zanicchi', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('4', 'Fabrizio Corona', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('5', 'Flavia Vento', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('6', 'Germano Mosconi', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('7', 'Giucas Casella', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('8', 'Valeria Marini', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('9', 'Wanna Marchi', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('10', 'Lino Banfi', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('11', 'Vittorio Sgarbi', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('12', 'Pamela Prati', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('13', 'I Ragazzi della 3C', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('14', 'Robocop', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('15', 'Santi Licheri', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('16', 'Platinette', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('17', 'Lele Mora', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('18', 'Ezio Greggio', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('19', 'Il Mago Otelma', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('20', 'Alvaro Vitali', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('21', 'Gigi D''Alessio', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('22', 'Mara Maionchi', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('23', 'Teo Mammucari', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('24', 'Paolo Bonolis', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('25', 'Antonella Mosetti', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('26', 'Karina Cascella', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('27', 'Maria Teresa Ruta', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('28', 'Tommaso Zorzi', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('29', 'Soleil Sorge', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('30', 'Francesca Cipriani', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('31', 'Alex Belli', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('32', 'Cristiano Malgioglio', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('33', 'Rita Pavone', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('34', 'DJ Francesco', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('35', 'Dan Harrow', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('36', 'Elio e le Storie Tese', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('37', 'Giampiero Galeazzi', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('38', 'Mike Bongiorno', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('39', 'Raffaella Carrà', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('40', 'Heather Parisi', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('41', 'Lorella Cuccarini', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('42', 'Chuck Norris', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('43', 'Steven Seagal', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('44', 'Nicolas Cage', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('45', 'David Hasselhoff', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('46', 'Jean-Claude Van Damme', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('47', 'Mr. T', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('48', 'Bruno Sacchi', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('49', 'Caparezza', NULL);
-
 INSERT INTO picks (id, name, image) VALUES ('50', 'Gianni Morandi', NULL);
+
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('1', 'partecipazioni_a_reality_show_reality');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('1', 'espulsione_dall_albo_cultura');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('1', 'scene_spinte_nei_film_trash');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('2', 'cazzotti_dati_nei_film_violenza');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('2', 'film_girati_cinema');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('3', 'partecipazioni_a_sanremo_festival');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('3', 'anni_di_carriera_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('4', 'mesi_in_galera_o_ai_domiciliari_galera');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('4', 'scandali_documentati_scandali');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('5', 'reality_show_abbandonati_ritiri');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('5', 'interviste_sugli_alieni_trash');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('6', 'bestemmie_in_diretta_tv_parolacce');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('6', 'milioni_di_views_su_youtube_viralit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('7', 'cucchiaini_piegati_in_tv_magia');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('7', 'partecipazioni_a_reality_show_reality');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('8', 'volte_che_ha_detto_stellare_tormentoni');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('8', 'partecipazioni_a_reality_show_reality');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('9', 'anni_in_galera_scontati_galera');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('9', 'truffe_accertate_scandali');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('10', 'film_girati_cinema');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('10', 'volte_che_ha_detto_porca_puttena_tormentoni');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('11', 'insulti_dati_in_tv_trash_talk');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('11', 'litigi_televisivi_scandali');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('12', 'matrimoni_inventati_scandali');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('12', 'anni_di_carriera_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('13', 'stagioni_trasmesse_tv');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('13', 'puntate_totali_tv');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('14', 'criminali_arrestati_violenza');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('14', 'film_della_saga_cinema');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('15', 'canzoni_trash_pubblicate_musica');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('15', 'milioni_di_views_su_youtube_viralit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('16', 'anni_in_tv_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('16', 'litigi_in_diretta_trash_talk');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('17', 'mesi_in_galera_o_ai_domiciliari_galera');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('17', 'vip_gestiti_nella_carriera_lavoro');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('18', 'puntate_di_striscia_la_notizia_tv');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('18', 'anni_di_carriera_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('19', 'previsioni_sbagliate_epic_fail');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('19', 'partecipazioni_a_reality_show_reality');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('20', 'film_comici_girati_cinema');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('20', 'scene_spinte_nei_film_trash');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('21', 'partecipazioni_a_sanremo_festival');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('21', 'figli_avuti_famiglia');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('22', 'anni_nell_industria_musicale_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('22', 'volte_che_ha_detto_madonna_tormentoni');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('23', 'programmi_tv_condotti_tv');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('23', 'litigi_con_ospiti_trash_talk');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('24', 'programmi_tv_condotti_tv');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('24', 'anni_di_carriera_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('25', 'partecipazioni_a_reality_show_reality');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('25', 'ritocchini_estetici_ammessi_chirurgia');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('26', 'anni_a_uomini_e_donne_tv');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('26', 'litigi_in_studio_trash_talk');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('27', 'anni_di_carriera_in_tv_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('27', 'volte_che_ha_urlato_guenda_tormentoni');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('28', 'reality_show_vinti_reality');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('28', 'follower_instagram_milioni_social');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('29', 'partecipazioni_a_reality_show_reality');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('29', 'litigi_al_gf_vip_trash_talk');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('30', 'partecipazioni_a_reality_show_reality');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('30', 'ritocchini_al_seno_chirurgia');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('31', 'triangoli_amorosi_in_tv_scandali');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('31', 'volte_che_ha_detto_chimica_artistica_tormentoni');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('32', 'canzoni_scritte_per_altri_musica');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('32', 'parrucche_indossate_in_tv_look');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('33', 'partecipazioni_a_sanremo_festival');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('33', 'tweet_controversi_social');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('34', 'remix_lento_violento_prodotti_musica');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('34', 'serate_in_discoteca_lavoro');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('35', 'tormentoni_estivi_musica');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('35', 'settimane_in_classifica_successo');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('36', 'partecipazioni_a_sanremo_festival');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('36', 'album_pubblicati_musica');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('37', 'anni_di_carriera_rai_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('37', 'olimpiadi_raccontate_sport');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('38', 'anni_di_carriera_in_tv_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('38', 'quiz_show_condotti_tv');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('39', 'anni_di_carriera_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('39', 'paesi_dove_famosa_successo');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('39', 'album_pubblicati_musica');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('40', 'anni_in_tv_italiana_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('40', 'litigi_pubblici_con_lorella_cuccarini_scandali');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('41', 'programmi_tv_condotti_tv');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('41', 'anni_di_carriera_longevit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('42', 'film_d_azione_girati_cinema');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('42', 'meme_su_internet_viralit');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('43', 'film_d_azione_girati_cinema');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('43', 'film_direct_to_dvd_epic_fail');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('44', 'film_girati_cinema');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('44', 'oscar_vinti_premi');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('45', 'stagioni_di_baywatch_tv');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('45', 'album_musicali_flop_epic_fail');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('46', 'film_d_azione_girati_cinema');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('46', 'spacchi_fatti_nei_film_violenza');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('47', 'collane_d_oro_indossate_look');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('47', 'volte_che_ha_detto_i_pity_the_fool_tormentoni');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('48', 'anni_a_drive_in_tv');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('48', 'volte_che_ha_detto_ciao_cari_amici_tormentoni');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('48', 'album_pubblicati_musica');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('49', 'album_pubblicati_musica');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('49', 'citazioni_colte_nei_testi_cultura');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('50', 'partecipazioni_a_sanremo_festival');
+INSERT INTO pick_facts (pick_id, fact_id) VALUES ('50', 'anni_di_carriera_longevit');
 

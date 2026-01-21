@@ -34,17 +34,71 @@ function generateSQLiteScript(jsonData, outputPath) {
   sql += '  FOREIGN KEY (fact_id) REFERENCES facts(id)\n';
   sql += ');\n\n';
   
-  // Insert facts
-  if (jsonData.facts) {
+  // Detect format: compact (facts embedded in picks) or legacy (separate facts array)
+  const isCompactFormat = !jsonData.facts || !Array.isArray(jsonData.facts) || jsonData.facts.length === 0;
+  
+  if (isCompactFormat) {
+    // Handle compact format: extract unique facts from picks
+    const factsMap = new Map(); // key: fact_id, value: fact object
+    const pickFactRelations = []; // array of {pick_id, fact_id}
+    
+    for (const pick of jsonData.picks) {
+      if (pick.facts && Array.isArray(pick.facts)) {
+        for (const fact of pick.facts) {
+          // Generate a unique fact ID based on description and category
+          const factId = `${fact.description}_${fact.category}`
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '_')
+            .replace(/^_+|_+$/g, '');
+          
+          // Store unique fact
+          if (!factsMap.has(factId)) {
+            factsMap.set(factId, {
+              id: factId,
+              description: fact.description,
+              category: fact.category,
+              image: fact.image || null
+            });
+          }
+          
+          // Store pick-fact relationship
+          pickFactRelations.push({
+            pick_id: pick.id,
+            fact_id: factId
+          });
+        }
+      }
+    }
+    
+    // Insert unique facts
+    for (const fact of factsMap.values()) {
+      const imageValue = fact.image ? `'${fact.image.replace(/'/g, "''")}'` : 'NULL';
+      sql += `INSERT INTO facts (id, description, category, image) VALUES ('${fact.id.replace(/'/g, "''")}', '${fact.description.replace(/'/g, "''")}', '${fact.category.replace(/'/g, "''")}', ${imageValue});\n`;
+    }
+    sql += '\n';
+    
+    // Insert picks
+    for (const pick of jsonData.picks) {
+      const imageValue = pick.image ? `'${pick.image.replace(/'/g, "''")}'` : 'NULL';
+      sql += `INSERT INTO picks (id, name, image) VALUES ('${pick.id.replace(/'/g, "''")}', '${pick.name.replace(/'/g, "''")}', ${imageValue});\n`;
+    }
+    sql += '\n';
+    
+    // Insert pick-fact relationships
+    for (const relation of pickFactRelations) {
+      sql += `INSERT INTO pick_facts (pick_id, fact_id) VALUES ('${relation.pick_id.replace(/'/g, "''")}', '${relation.fact_id.replace(/'/g, "''")}');\n`;
+    }
+    sql += '\n';
+  } else {
+    // Handle legacy format with separate facts array
+    // Insert facts
     for (const fact of jsonData.facts) {
       const imageValue = fact.image ? `'${fact.image.replace(/'/g, "''")}'` : 'NULL';
       sql += `INSERT INTO facts (id, description, category, image) VALUES ('${fact.id.replace(/'/g, "''")}', '${fact.description.replace(/'/g, "''")}', '${fact.category.replace(/'/g, "''")}', ${imageValue});\n`;
     }
     sql += '\n';
-  }
-  
-  // Insert picks and pick_facts
-  if (jsonData.picks) {
+    
+    // Insert picks and pick_facts
     for (const pick of jsonData.picks) {
       const imageValue = pick.image ? `'${pick.image.replace(/'/g, "''")}'` : 'NULL';
       sql += `INSERT INTO picks (id, name, image) VALUES ('${pick.id.replace(/'/g, "''")}', '${pick.name.replace(/'/g, "''")}', ${imageValue});\n`;
@@ -103,10 +157,28 @@ function main() {
       
       // Count facts
       const allFacts = new Set();
-      if (jsonData.facts && Array.isArray(jsonData.facts)) {
-        jsonData.facts.forEach(fact => allFacts.add(fact.id));
+      const isCompactFormat = !jsonData.facts || !Array.isArray(jsonData.facts) || jsonData.facts.length === 0;
+      
+      if (isCompactFormat) {
+        // Count facts embedded in picks
+        for (const pick of jsonData.picks) {
+          if (pick.facts && Array.isArray(pick.facts)) {
+            for (const fact of pick.facts) {
+              const factId = `${fact.description}_${fact.category}`
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '_')
+                .replace(/^_+|_+$/g, '');
+              allFacts.add(factId);
+            }
+          }
+        }
+        console.log(`  - Found ${allFacts.size} unique facts (compact format)`);
+      } else {
+        if (jsonData.facts && Array.isArray(jsonData.facts)) {
+          jsonData.facts.forEach(fact => allFacts.add(fact.id));
+        }
+        console.log(`  - Found ${allFacts.size} facts (legacy format)`);
       }
-      console.log(`  - Found ${allFacts.size} facts`);
       
       // Generate SQL script
       generateSQLiteScript(jsonData, sqlPath);
